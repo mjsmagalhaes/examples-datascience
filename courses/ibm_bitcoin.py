@@ -25,5 +25,5 @@ fig = go.Figure(data=[
 ])
 
 fig.update_layout(xaxis_title='Date', yaxis_title='Price', title='BitCoin')
-fig.write_html("plot.html")
+fig.write_html("bitcoin_variation.html")
 fig.show(renderer="png")
