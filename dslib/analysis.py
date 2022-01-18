@@ -4,6 +4,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from sklearn.metrics import confusion_matrix, classification_report
+from fast_ml.model_development import train_valid_test_split, train_test_split
+
 from .nlp import nlp
 
 class Analysis:
@@ -17,7 +19,7 @@ class Analysis:
     def __str__(self):
         return self.data.to_string()
 
-    # --- Information ---
+    # --- Factory ---
     @staticmethod
     def from_csv(file):
         return Analysis(pd.read_csv(file))
@@ -30,6 +32,9 @@ class Analysis:
     @property
     def n_atributes(self):
         return self.data.shape[1]
+    
+    def describe(self):
+        return self.data.describe()
 
     # --- Selection ---
     def drop_columns(self, columns):
@@ -48,22 +53,28 @@ class Analysis:
         y_min, y_max = Y.min() - 1, Y.max() + 1
 
         return np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    
+    def get_sets():
+        pass
+        
     # --- PreProcess ---
     # --- Transform ---
     # --- Store ---
     # --- Evaluate ---
-    def evaluate(self, y, y_pred, plot_cm=True, print_report=True):
+    def evaluate(self, y, y_pred, plot_cm=True, print_report=True, title='Evaluation'):
         cm=confusion_matrix(y, y_pred)
 
         if plot_cm:
             f, ax = plt.subplots()
             sns.heatmap(
-                cm,annot = True,
+                cm,
+                annot = True,
                 linewidths=0.5,
                 linecolor="red",
                 fmt = ".2f",
                 ax=ax
             )
+            plt.title(title)
             plt.xlabel("y_pred")
             plt.ylabel("y_true")
             plt.show()
