@@ -1,15 +1,14 @@
-import nltk
-import sklearn
+import spacy
+import re
 import pandas as pd
+
+from functools import reduce
 
 from nltk import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 
 from sklearn.feature_extraction.text import CountVectorizer
-
-import spacy
-import re
 
 class nlp:
     def __init__(self):
@@ -25,15 +24,26 @@ class nlp:
     def extract_vocab(self, corpus):
         self.vocabs = self.vocabs or set()
 
-        for doc in corpus:
+        def process(doc):
             sentence = re.sub('[^a-z]', ' ', doc.lower())
             tokens = self.nlp(sentence)
-            lemma_list = list(map(lambda x: x.lemma_.strip().lower(), tokens))
+            lemma_list = map(lambda x: x.lemma_.strip().lower(), tokens)
             new_vocabs = [l for l in lemma_list if l not in self.sws]
-            # print(tokens, new_vocabs)
-            self.vocabs.update(new_vocabs)
+            return new_vocabs
+
+        def update(db, doc):
+            db.update(doc)
+            return db
+
+        # Map + Reduce: Map doc to its vocabs and Reduce to set of vocabs.
+        self.vocabs = set(reduce(
+            update,
+            map(lambda doc: process(doc), corpus),
+            self.vocabs
+        ))
 
         return self.vocabs
+
 
     def extract_corpus(self, corpus, vocabs=None):
         vocabs = vocabs or self.vocabs
@@ -52,41 +62,46 @@ class nlp:
         # vec.inverse_transform(M)
         return vec.transform(extracted_corpus).toarray()
 
-# %% Old Code
+if __name__ == '__main__':
+    corpus = ['I like this car.', 'It has GPS navigation.', 'It price also very cheap']
 
-corpus = ['I like this car.', 'It has GPS navigation.', 'It price also very cheap']
+    n = nlp()
+    v = n.extract_vocab(corpus)
 
-def parse_file(f):
-    with open(f,'r') as data:
-        corona_data = [text for text in data if text.count(' ') >= 2]
-
-    return corona_data
-
-def transform(document, sws, lemma, tok):
-    candidates = list(tok(document.lower()))
-    # withMeaning = set(candidates).difference(sws).difference({'.',','})
-    withMeaning = list(filter(lambda x: not (x in sws), candidates))
-    # return list(map(lemma, withMeaning)), withMeaning, candidates
-    return ' '.join(map(lemma, withMeaning))
-
-def vectorize_nltk(corpus):
-    sws=set(stopwords.words('english'))
-    lemmatizer = WordNetLemmatizer()
-
-    tokens = set()
-    for document in corpus:
-        final = self.transform(document)
-        tokens.update(final)
-
-    return tokens
+    # %% Old Code
 
 
+    def parse_file(f):
+        with open(f,'r') as data:
+            corona_data = [text for text in data if text.count(' ') >= 2]
 
-def vectorize(corpus,vocab=None):
-    vectorizer=CountVectorizer(stop_words='english',vocabulary=vocab)
-    M = vectorizer.fit_transform(corpus)
+        return corona_data
 
-    m = pd.DataFrame(M.toarray(), columns = vectorizer.get_feature_names_out())
-    print(m)
+    def transform(document, sws, lemma, tok):
+        candidates = list(tok(document.lower()))
+        # withMeaning = set(candidates).difference(sws).difference({'.',','})
+        withMeaning = list(filter(lambda x: not (x in sws), candidates))
+        # return list(map(lemma, withMeaning)), withMeaning, candidates
+        return ' '.join(map(lemma, withMeaning))
 
-    return M, vectorizer
+    def vectorize_nltk(corpus):
+        sws=set(stopwords.words('english'))
+        lemmatizer = WordNetLemmatizer()
+
+        tokens = set()
+        for document in corpus:
+            final = self.transform(document)
+            tokens.update(final)
+
+        return tokens
+
+
+
+    def vectorize(corpus,vocab=None):
+        vectorizer=CountVectorizer(stop_words='english',vocabulary=vocab)
+        M = vectorizer.fit_transform(corpus)
+
+        m = pd.DataFrame(M.toarray(), columns = vectorizer.get_feature_names_out())
+        print(m)
+
+        return M, vectorizer
