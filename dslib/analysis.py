@@ -4,14 +4,19 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from sklearn.metrics import confusion_matrix, classification_report
+from sklearn import preprocessing
+
 from fast_ml.model_development import train_valid_test_split, train_test_split
 
 from .nlp import nlp
+from .plot import Plot
+
 
 class Analysis:
     def __init__(self, data):
         self.data = data
         self.nlp = nlp()
+        self.plot = Plot()
 
     def __repr__(self):
         return self.data
@@ -22,7 +27,8 @@ class Analysis:
     # --- Factory ---
     @staticmethod
     def from_csv(file):
-        return Analysis(pd.read_csv(file))
+        raw = pd.read_csv(file)
+        return Analysis(raw), raw
 
     # --- Information ---
     @property
@@ -32,7 +38,7 @@ class Analysis:
     @property
     def n_atributes(self):
         return self.data.shape[1]
-    
+
     def describe(self):
         return self.data.describe()
 
@@ -53,25 +59,37 @@ class Analysis:
         y_min, y_max = Y.min() - 1, Y.max() + 1
 
         return np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
-    
+
     def get_sets():
         pass
-        
+
     # --- PreProcess ---
+    def scaler_fit(self, data: pd.DataFrame):
+        self.scaler = preprocessing.StandardScaler().fit(data)
+
+    def scale(self, data: pd.DataFrame):
+        scData = self.scaler.transform(data)
+        return pd.DataFrame(scData, columns=data.columns)
+
     # --- Transform ---
     # --- Store ---
+
     # --- Evaluate ---
-    def evaluate(self, y, y_pred, plot_cm=True, print_report=True, title='Evaluation'):
-        cm=confusion_matrix(y, y_pred)
+    def evaluate(
+        self,
+        y, y_pred,
+        plot_cm=True, print_report=True, title='Evaluation'
+    ):
+        cm = confusion_matrix(y, y_pred)
 
         if plot_cm:
             f, ax = plt.subplots()
             sns.heatmap(
                 cm,
-                annot = True,
+                annot=True,
                 linewidths=0.5,
                 linecolor="red",
-                fmt = ".2f",
+                fmt=".2f",
                 ax=ax
             )
             plt.title(title)
