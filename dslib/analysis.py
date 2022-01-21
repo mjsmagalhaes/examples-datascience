@@ -16,7 +16,7 @@ class Analysis:
     def __init__(self, data):
         self.data = data
         self.nlp = nlp()
-        self.plot = Plot()
+        self.eda = Plot()
 
     def __repr__(self):
         return self.data
@@ -40,6 +40,7 @@ class Analysis:
         return self.data.shape[1]
 
     def describe(self):
+        print(self.data.info())
         return self.data.describe()
 
     # --- Selection ---
