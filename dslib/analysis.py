@@ -28,7 +28,7 @@ class Analysis:
   # --- Factory ---
   @staticmethod
   def from_csv(file):
-    raw = dt.fread("forestfires.csv").to_pandas()
+    raw = dt.fread(file).to_pandas()
     return Analysis(raw), raw
 
   # --- Information ---
