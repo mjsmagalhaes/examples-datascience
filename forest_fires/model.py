@@ -52,13 +52,13 @@ def build_model(x: pd.DataFrame, y: pd.DataFrame):
 
   model.compile(
       # optimizer=RMSprop(),
-      optimizer=SGD(momentum=0.2, learning_rate=0.02),
+      optimizer=SGD(momentum=0.2, learning_rate=0.05),
       loss="mean_squared_error"
   )
 
   th = model.fit(
       x, y,
-      epochs=50, steps_per_epoch=1,
+      epochs=150, steps_per_epoch=1,
       validation_split=None, verbose=0
   )
 
