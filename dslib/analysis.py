@@ -9,6 +9,8 @@ from sklearn import preprocessing
 
 from fast_ml.model_development import train_valid_test_split, train_test_split
 
+from IPython.display import Markdown as md
+
 from .nlp import nlp
 from .plot import Plot
 
@@ -43,6 +45,11 @@ class Analysis:
   def describe(self):
     print(self.data.info())
     return self.data.describe()
+
+  def missing_data(self, data):
+    m = np.sum(data.isna(), axis=0) + np.sum(data.isnull(), axis=0)
+    s = pd.DataFrame(m, columns=['NA or Null'])
+    return md(s.to_markdown())
 
   # --- Selection ---
   def drop_columns(self, columns):

@@ -103,17 +103,16 @@ class Plot:
     """
     return data.describe()
 
-  def describe_category(self, data, dtype='object'):
+  def describe_category(self, data, dtype=['object', 'category']):
     """
     Describe categorical variables by printing the amount of samples each value had.
     """
     wdg_list = []
     for name, col in data.select_dtypes(include=dtype).iteritems():
-      w = widgets.Output()
-      with w:
-        print(pd.DataFrame(col.value_counts(), columns=[name]))
-
-      wdg_list.append(w)
+      df = pd.DataFrame(col.value_counts(), columns=[name])
+      wdg_list.append(
+          widgets.HTML(df.to_html())
+      )
 
     box_layout = Layout(
         display='flex',
@@ -122,10 +121,10 @@ class Plot:
         width='auto'
     )
 
-    display(widgets.HBox(wdg_list, layout=box_layout))
+    return widgets.HBox(wdg_list, layout=box_layout)
 
   def corr(self, data, size=None):
-    """ 
+    """
     Plot correlation matrix and returns it.
     """
     corr = data.corr()
