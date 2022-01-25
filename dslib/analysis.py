@@ -1,18 +1,20 @@
+from collections import namedtuple
 import datatable as dt
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from sklearn.metrics import confusion_matrix, classification_report
 from sklearn import preprocessing
-
-from fast_ml.model_development import train_valid_test_split, train_test_split
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.model_selection import train_test_split
 
 from IPython.display import Markdown as md
 
 from .nlp import nlp
 from .plot import Plot
+
+Dataset = namedtuple('Dataset', 'x y')
 
 
 class Analysis:
@@ -83,7 +85,29 @@ class Analysis:
   # --- Transform ---
   # --- Store ---
 
+  def partition(self, x, y, n_test=0.4, n_validation=0):
+
+    n_split = n_test + n_validation
+
+    p = train_test_split(x, y, test_size=n_split)
+
+    if n_validation == 0:
+      Partition = namedtuple('Partition', 'train test')
+      return Partition(
+          Dataset(p[0], p[2]),  # train.x, train.y
+          Dataset(p[1], p[3])  # test.x, test.y
+      )
+    else:
+      Partition = namedtuple('Partition', 'train test valid')
+      q = train_test_split(p[1], p[3], test_size=n_validation / n_split)
+      return Partition(
+          Dataset(p[0], p[2]),  # train.x, train.y
+          Dataset(q[0], q[2]),  # test.x, test.y
+          Dataset(q[1], q[3]),  # valid.x, valid.y
+      )
+
   # --- Evaluate ---
+
   def evaluate(
       self,
       y, y_pred,

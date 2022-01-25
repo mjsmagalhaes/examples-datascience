@@ -18,7 +18,7 @@ cmap_light = "Purples"
 cmap_bold = ["white", "purple"]
 
 
-def categorise(boundaries, labels, x):
+def categorise(x, boundaries, labels):
   f = pd.DataFrame(
       pd.cut(x, boundaries, labels=labels).to_numpy(),
       columns=['hasFire'],
