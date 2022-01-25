@@ -19,10 +19,15 @@ cmap_bold = ["white", "purple"]
 
 
 def categorise(boundaries, labels, x):
-  f = pd.cut(x, boundaries, labels=labels)
+  f = pd.DataFrame(
+      pd.cut(x, boundaries, labels=labels).to_numpy(),
+      columns=['hasFire'],
+      dtype='category'
+  )
+
   enc = OneHotEncoder()
-  y = enc.fit_transform(f.to_numpy().reshape(-1, 1))
-  return pd.DataFrame(y.todense(), columns=enc.categories_), f
+  y = enc.fit_transform(f)
+  return f, pd.DataFrame(y.todense(), columns=enc.categories_)
 
 
 # def build_sets(data: pd.DataFrame, boundary=0):
@@ -39,7 +44,7 @@ def categorise(boundaries, labels, x):
 
 def build_model(x: pd.DataFrame, y: pd.DataFrame):
   model = Sequential([
-      Dense(units=50, activation='relu', input_shape=(8,)),
+      Dense(units=10, activation='tanh', input_shape=(8,)),
       Dense(units=2, activation='softmax')
   ])
 
@@ -47,13 +52,13 @@ def build_model(x: pd.DataFrame, y: pd.DataFrame):
 
   model.compile(
       # optimizer=RMSprop(),
-      optimizer=SGD(momentum=0.2, learning_rate=0.2),
+      optimizer=SGD(momentum=0.2, learning_rate=0.02),
       loss="mean_squared_error"
   )
 
   th = model.fit(
       x, y,
-      epochs=30, steps_per_epoch=1,
+      epochs=50, steps_per_epoch=1,
       validation_split=None, verbose=0
   )
 
