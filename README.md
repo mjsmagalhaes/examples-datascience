@@ -1,6 +1,6 @@
 # examples-datascience
 
-My data science experiences.
+My data science adventures.
 
 ## Folder Structure:
 
@@ -15,5 +15,5 @@ My data science experiences.
 
 Those projects are in better shape but still considered a WIP.
 
-- World of Warcraft Log
-- Forest Fires
+- [World of Warcraft Log](wow_log.ipynb)
+- [Forest Fires (ICU Database)](forest_fires.ipynb)
