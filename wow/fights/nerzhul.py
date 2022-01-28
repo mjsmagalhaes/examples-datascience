@@ -35,6 +35,8 @@ def orbs_lifecycle(e: Encounter):
 
 
 def orbs_carriers(orbDisposed):
+  """ Creates a list of orb carriers. """
+
   idx = orbDisposed.sort_values('ID').duplicated(subset='ID', keep=False)
   return orbDisposed.sort_values('ID').style.applymap(
       lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[idx, :]
@@ -42,6 +44,8 @@ def orbs_carriers(orbDisposed):
 
 
 def orbs_overview(orbSpawned, orbDisposed):
+  """ Creates a table with orb data. """
+
   orbsData = pd.merge(
       orbSpawned,
       pd.merge(
