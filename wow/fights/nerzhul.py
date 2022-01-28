@@ -54,11 +54,11 @@ def orbs_overview(orbBorn, orbDisposed):
       how='inner'
   )
 
-  orbsData['TimeStamp_x'] = pd.to_datetime(
-      orbsData['TimeStamp_x'], format="%m/%d %H:%M:%S.%f")
+  # orbsData['TimeStamp_x'] = pd.to_datetime(
+  #     orbsData['TimeStamp_x'])
 
-  orbsData['TimeStamp_y'] = pd.to_datetime(
-      orbsData['TimeStamp_y'], format="%m/%d %H:%M:%S.%f")
+  # orbsData['TimeStamp_y'] = pd.to_datetime(
+  #     orbsData['TimeStamp_y'], format="%m/%d %H:%M:%S.%f")
 
   table = pd.merge(
       orbsData,
@@ -67,10 +67,16 @@ def orbs_overview(orbBorn, orbDisposed):
       on=orbsData.index
   )[['ID', 'TimeStamp_x', 'TimeStamp_y', 'Time Elapsed', 'Player']]
 
+  table.columns = [
+      'ID',
+      'TimeStamp Born', 'TimeStamp Disposed', 'Time Elapsed',
+      'Player'
+  ]
+
   return table.style.applymap(
       lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
   ).applymap(
-      lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp_x', 'TimeStamp_y']]
+      lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp Born', 'TimeStamp Disposed']]
   )
 
 

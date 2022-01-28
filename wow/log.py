@@ -94,11 +94,13 @@ class Encounter:
   def __init__(self, log, beg, end):
     self.beg = beg
     self.timestamp_begin = date.datetime.strptime(
-        beg.timestamp, '%m/%d %H:%M:%S.%f').replace(year=2022)
+        beg.timestamp, '%m/%d %H:%M:%S.%f'
+    ).replace(year=2022)
 
     self.end = end
     self.timestamp_end = date.datetime.strptime(
-        end.timestamp, '%m/%d %H:%M:%S.%f').replace(year=2022)
+        end.timestamp, '%m/%d %H:%M:%S.%f'
+    ).replace(year=2022)
 
     self.duration = self.timestamp_end - self.timestamp_begin
 

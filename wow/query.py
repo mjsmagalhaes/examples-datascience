@@ -1,5 +1,6 @@
 import pandas as pd
 import datatable as dt
+import datetime as date
 
 
 class Query:
@@ -102,7 +103,9 @@ class Predicate:
     return lambda x: x.event
 
   def getTimestamp():
-    return lambda x: x.timestamp
+    return lambda x: date.datetime.strptime(
+        x.timestamp, '%m/%d %H:%M:%S.%f'
+    ).replace(year=2022)
 
   # --- Getters: Actor ---
 
