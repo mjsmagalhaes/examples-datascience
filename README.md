@@ -5,8 +5,8 @@ My data science experiences.
 Folder Structure:
 
 - dslib
-  -- python packages used to analyse the data
+  - python packages used to analyse the data
 - data
-  -- datasets
+  - datasets
 - other folders (with dataset names)
-  -- they contain scripts used in the analysis of that specific dataset
+  - they contain scripts used in the analysis of that specific dataset
