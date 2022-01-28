@@ -37,7 +37,7 @@ def orbs_lifecycle(e: Encounter):
 def orbs_carriers(orbDisposed):
   idx = orbDisposed.sort_values('ID').duplicated(subset='ID', keep=False)
   return orbDisposed.sort_values('ID').style.applymap(
-      lambda x: 'color: yellow', subset=pd.IndexSlice[idx, :]
+      lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[idx, :]
   )
 
 
@@ -68,7 +68,7 @@ def orbs_overview(orbBorn, orbDisposed):
   )[['ID', 'TimeStamp_x', 'TimeStamp_y', 'Time Elapsed', 'Player']]
 
   return table.style.applymap(
-      lambda x: 'color: yellow', subset=pd.IndexSlice[:, ['Time Elapsed']]
+      lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
   ).applymap(
       lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp_x', 'TimeStamp_y']]
   )
