@@ -20,7 +20,7 @@ def orbs_lifecycle(e: Encounter):
   ).pandas(['TimeStamp', 'ID', 'Player'])
 
   # When Orbs Spawn
-  orbBorn = e.q.filter(
+  orbSpawned = e.q.filter(
       Predicate.isEvent('SPELL_AURA_APPLIED')
   ).filter(
       Predicate.isAction('"Eternal Torment"')
@@ -31,7 +31,7 @@ def orbs_lifecycle(e: Encounter):
       )
   ).pandas(['TimeStamp', 'ID'])
 
-  return (orbBorn, orbDisposed)
+  return (orbSpawned, orbDisposed)
 
 
 def orbs_carriers(orbDisposed):
@@ -41,9 +41,9 @@ def orbs_carriers(orbDisposed):
   )
 
 
-def orbs_overview(orbBorn, orbDisposed):
+def orbs_overview(orbSpawned, orbDisposed):
   orbsData = pd.merge(
-      orbBorn,
+      orbSpawned,
       pd.merge(
           orbDisposed.groupby('ID')['TimeStamp'].max(),
           orbDisposed,
@@ -69,14 +69,14 @@ def orbs_overview(orbBorn, orbDisposed):
 
   table.columns = [
       'ID',
-      'TimeStamp Born', 'TimeStamp Disposed', 'Time Elapsed',
+      'TimeStamp Spawned', 'TimeStamp Disposed', 'Time Elapsed',
       'Player'
   ]
 
   return table.style.applymap(
       lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
   ).applymap(
-      lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp Born', 'TimeStamp Disposed']]
+      lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp Spawned', 'TimeStamp Disposed']]
   )
 
 
