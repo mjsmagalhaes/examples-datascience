@@ -1,5 +1,7 @@
 import datetime as date
 
+from IPython.display import Markdown as md
+
 from .query import Query
 
 
@@ -92,20 +94,40 @@ class Encounter:
   def __init__(self, log, beg, end):
     self.beg = beg
     self.timestamp_begin = date.datetime.strptime(
-        beg.timestamp, '%m/%d %H:%M:%S.%f')
+        beg.timestamp, '%m/%d %H:%M:%S.%f').replace(year=2022)
+
     self.end = end
     self.timestamp_end = date.datetime.strptime(
-        end.timestamp, '%m/%d %H:%M:%S.%f')
+        end.timestamp, '%m/%d %H:%M:%S.%f').replace(year=2022)
+
+    self.duration = self.timestamp_end - self.timestamp_begin
+
+    self.id = int(beg.rawdata[1])
+    self.name = beg.rawdata[2]
+
     self.log = log[beg.idx: end.idx]
 
   def __repr__(self) -> str:
+    return self.text()
+
+  def text(self):
     return """
-    {timestamp_begin}
-    {beg.event} Log[{beg.idx}]
-    {0} entries
-    {end.event} Log[{end.idx}]
-    {timestamp_end}
+<style>
+sb {{ color: steelblue }}
+o {{ color: Orange }}
+g {{ color: Green }}
+</style>
+
+## <sb>{name} (id: {id})</sb>
+- {beg.event} (log: {beg.idx})
+  - *{timestamp_begin}*  
+- {0} entries in **{duration}**
+- {end.event} (log: {end.idx})
+  - *{timestamp_end}*
     """.format(len(self.log), **self.__dict__)
+
+  def md(self):
+    return md(self.text())
 
   @property
   def q(self):

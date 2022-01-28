@@ -1,3 +1,7 @@
+import pandas as pd
+import datatable as dt
+
+
 class Query:
   def __init__(self, data, inPlace=True):
     # print('New Query')
@@ -8,9 +12,6 @@ class Query:
 
   def iter(self):
     return iter(self.data)
-
-  # def __next__(self):
-  #   return self.data.__next__()
 
   def apply(self, fn1, fn2, data):
     return Query(fn1(fn2, data))
@@ -28,6 +29,8 @@ class Query:
   def filter(self, fn):
     return self.apply(filter, fn, self.iter())
 
+  # --- Finalizers ---
+
   def set(self):
     return set(self.iter())
 
@@ -36,6 +39,12 @@ class Query:
 
   def tuple(self):
     return tuple(self.iter())
+
+  def pandas(self, columns=None):
+    return pd.DataFrame(self.iter(), columns=columns)
+
+  def datatable(self, columns=None):
+    return dt.Frame(self.pandas(columns=columns))
 
 
 class Predicate:
