@@ -4,9 +4,7 @@ import pandas as pd
 import datatable as dt
 import datetime as date
 
-
-from collections.abc import Callable
-from typing import Any, Union, List, Tuple
+from typing import Any, Union, List, Tuple, Callable
 
 FilterPredicate = Callable[[Any], bool]
 
