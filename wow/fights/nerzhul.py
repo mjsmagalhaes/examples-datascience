@@ -1,6 +1,48 @@
 import pandas as pd
+import ipywidgets as widgets
+
+from IPython.display import display, clear_output
+
 from wow.query import Predicate
 from wow.log import Encounter
+
+
+def ui(encounters):
+  encDropdown = widgets.Dropdown(
+      options=list(map(lambda enc: (
+          str(enc[0] + 1) + ' ' + enc[1].title(), enc[0]), enumerate(encounters))),
+      value=0,
+      description='Encounter:',
+  )
+
+  encButton = widgets.Button(
+      description='Go!',
+      disabled=False,
+      button_style='success',  # 'success', 'info', 'warning', 'danger' or ''
+      tooltip='Click me',
+      icon='check'  # (FontAwesome names without the `fa-` prefix)
+  )
+
+  out = widgets.Output()
+
+  def update(x):
+    with out:
+      clear_output()
+      run(encounters[encDropdown.value])
+
+  encButton.on_click(update)
+
+  return widgets.VBox([
+      widgets.HBox([encDropdown, encButton]),
+      out
+  ])
+
+
+def run(encounter: Encounter):
+  display(encounter.md())
+  (orbSpawned, orbDisposed) = orbs_lifecycle(encounter)
+  display(orbs_carriers(orbDisposed))
+  display(orbs_overview(orbSpawned, orbDisposed))
 
 
 def orbs_lifecycle(e: Encounter):
@@ -39,8 +81,14 @@ def orbs_carriers(orbDisposed):
 
   idx = orbDisposed.sort_values('ID').duplicated(subset='ID', keep=False)
   return orbDisposed.sort_values('ID').style.applymap(
-      lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[idx, :]
-  )
+      lambda x: 'color: blue; font-weight: bold', subset=pd.IndexSlice[idx, :]
+  ).set_caption('List of Orb Carriers').set_table_styles([{
+      'selector': 'caption',
+      'props': [
+          ('font-size', '16px'),
+          ('font-weight', 'bold')
+      ]
+  }])
 
 
 def orbs_overview(orbSpawned, orbDisposed):
@@ -78,10 +126,16 @@ def orbs_overview(orbSpawned, orbDisposed):
   ]
 
   return table.style.applymap(
-      lambda x: 'color: yellow; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
+      lambda x: 'color: blue; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
   ).applymap(
       lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp Spawned', 'TimeStamp Disposed']]
-  )
+  ).set_caption('Orb Lifespan Overview').set_table_styles([{
+      'selector': 'caption',
+      'props': [
+          ('font-size', '16px'),
+          ('font-weight', 'bold')
+      ]
+  }])
 
 
 def orbs_bugs(orbDisposed):

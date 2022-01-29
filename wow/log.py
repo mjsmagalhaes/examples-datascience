@@ -78,7 +78,7 @@ class Record:
   def parse_action(self):
     self.action_id, self.action, *self.action_e1 = self.rawdata[9:]
 
-  def hex_to_binary(hex_number: str, num_digits: int = 64) -> str:
+  def hex_to_binary(self, hex_number: str, num_digits: int = 64) -> str:
     """
     Converts a hexadecimal value into a string representation
     of the corresponding binary value.
@@ -122,6 +122,9 @@ class Encounter:
 
   def __repr__(self) -> str:
     return self.text()
+
+  def title(self) -> str:
+    return f'{self.name} {self.duration.seconds // 60}:{self.duration.seconds % 60:02d}'
 
   def text(self):
     return """
