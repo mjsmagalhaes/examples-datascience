@@ -39,10 +39,10 @@ def ui(encounters):
 
 
 def run(encounter: Encounter):
-  display(encounter.md())
+  encounter.md()
   (orbSpawned, orbDisposed) = orbs_lifecycle(encounter)
-  display(orbs_carriers(orbDisposed))
-  display(orbs_overview(orbSpawned, orbDisposed))
+  orbs_carriers(orbDisposed)
+  orbs_overview(orbSpawned, orbDisposed)
 
 
 def orbs_lifecycle(e: Encounter):
@@ -80,7 +80,8 @@ def orbs_carriers(orbDisposed):
   """ Creates a list of orb carriers. """
 
   idx = orbDisposed.sort_values('ID').duplicated(subset='ID', keep=False)
-  return orbDisposed.sort_values('ID').style.applymap(
+
+  tableCarriers = orbDisposed.sort_values('ID').style.applymap(
       lambda x: 'color: blue; font-weight: bold', subset=pd.IndexSlice[idx, :]
   ).set_caption('List of Orb Carriers').set_table_styles([{
       'selector': 'caption',
@@ -89,6 +90,10 @@ def orbs_carriers(orbDisposed):
           ('font-weight', 'bold')
       ]
   }])
+
+  display(tableCarriers)
+
+  return tableCarriers
 
 
 def orbs_overview(orbSpawned, orbDisposed):
@@ -125,7 +130,7 @@ def orbs_overview(orbSpawned, orbDisposed):
       'Player'
   ]
 
-  return table.style.applymap(
+  tableOverview = table.style.applymap(
       lambda x: 'color: blue; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
   ).applymap(
       lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp Spawned', 'TimeStamp Disposed']]
@@ -136,6 +141,10 @@ def orbs_overview(orbSpawned, orbDisposed):
           ('font-weight', 'bold')
       ]
   }])
+
+  display(tableOverview)
+
+  return tableOverview
 
 
 def orbs_bugs(orbDisposed):
