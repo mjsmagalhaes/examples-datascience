@@ -1,6 +1,6 @@
 import datetime as date
 
-from IPython.display import Markdown as md
+from IPython.display import display, Markdown as md
 
 from .query import Query
 
@@ -143,7 +143,7 @@ g {{ color: Green }}
     """.format(len(self.log), **self.__dict__)
 
   def md(self):
-    return md(self.text())
+    display(md(self.text()))
 
   @property
   def q(self):
