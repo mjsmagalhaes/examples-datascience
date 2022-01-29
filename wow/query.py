@@ -6,12 +6,12 @@ import datetime as date
 
 
 from collections.abc import Callable
-from typing import Annotated, Any, Union, List, Tuple
+from typing import Any, Union, List, Tuple
 
 FilterPredicate = Callable[[Any], bool]
 
 MapFunction = Callable[[Any], Any]
-MapPredicate = Annotated[MapFunction, List[MapFunction], Tuple[MapFunction]]
+MapPredicate = Union[MapFunction, List[MapFunction], Tuple[MapFunction]]
 
 
 class Query:
@@ -76,7 +76,7 @@ class Query:
   def tuple(self):
     return tuple(self.iter())
 
-  def pandas(self, columns: Annotated[List[str], None] = None) -> pd.DataFrame:
+  def pandas(self, columns: Union[List[str], None] = None) -> pd.DataFrame:
     """
     Transform the iterator in this object into a Pandas DataFrame
 
@@ -88,7 +88,7 @@ class Query:
     """
     return pd.DataFrame(self.iter(), columns=columns)
 
-  def datatable(self, columns: Annotated[List[str], None] = None) -> dt.Frame:
+  def datatable(self, columns: Union[List[str], None] = None) -> dt.Frame:
     """
     Transform the iterator in this object into a Datatable Frame.
 
