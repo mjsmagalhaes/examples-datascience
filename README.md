@@ -15,5 +15,7 @@ My data science adventures.
 
 Those projects are in better shape but still considered a WIP.
 
-- [World of Warcraft Log](wow_log.ipynb) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mjsmagalhaes/examples-datascience/HEAD?labpath=wow_log.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mjsmagalhaes/examples-datascience/HEAD?labpath=wow_log.ipynb)
+
+- [World of Warcraft Log](wow_log.ipynb)
 - [Forest Fires (ICU Database)](forest_fires.ipynb)
