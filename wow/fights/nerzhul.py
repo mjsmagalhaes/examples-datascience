@@ -1,41 +1,11 @@
 import pandas as pd
-import ipywidgets as widgets
 
-from IPython.display import display, clear_output
+# import ipywidgets as widgets
+
+from IPython.display import display
 
 from wow.query import Predicate
 from wow.log import Encounter
-
-
-def ui(encounters):
-  encDropdown = widgets.Dropdown(
-      options=list(map(lambda enc: (
-          str(enc[0] + 1) + ' ' + enc[1].title(), enc[0]), enumerate(encounters))),
-      value=0,
-      description='Encounter:',
-  )
-
-  encButton = widgets.Button(
-      description='Go!',
-      disabled=False,
-      button_style='success',  # 'success', 'info', 'warning', 'danger' or ''
-      tooltip='Click me',
-      icon='check'  # (FontAwesome names without the `fa-` prefix)
-  )
-
-  out = widgets.Output()
-
-  def update(x):
-    with out:
-      clear_output()
-      run(encounters[encDropdown.value])
-
-  encButton.on_click(update)
-
-  return widgets.VBox([
-      widgets.HBox([encDropdown, encButton]),
-      out
-  ])
 
 
 def run(encounter: Encounter):

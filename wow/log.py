@@ -1,8 +1,12 @@
+from __future__ import annotations
+
 import datetime as date
+
+from typing import List, Set, Tuple
 
 from IPython.display import display, Markdown as md
 
-from .query import Query
+from .query import Query, Predicate
 
 
 class Mask():
@@ -102,6 +106,26 @@ class Encounter:
   A encounter starts with the event ENCOUNTER_START and finishes with a ENCOUNTER_END event.
   """
 
+  @staticmethod
+  def parse(logLines) -> List[Encounter]:
+    # Create Record List
+    log = Query(enumerate(logLines)).map(lambda x: Record(x)).list()
+
+    # Split Encounters
+
+    qLog = Query(log)
+    beg = qLog.filter(Predicate.isEncounterStart())
+    end = qLog.filter(Predicate.isEncounterEnd())
+
+    encounters = Query(zip(beg, end)).map(lambda x: Encounter(log, x[0], x[1]))
+
+    e = encounters.filter(
+        lambda x: x.duration.total_seconds() > 60
+    ).list()
+    print(len(encounters.list()), ' => ', len(e))
+
+    return e
+
   def __init__(self, log, beg, end):
     self.beg = beg
     self.timestamp_begin = date.datetime.strptime(
@@ -148,3 +172,37 @@ g {{ color: Green }}
   @property
   def q(self):
     return Query(self.log)
+
+  @property
+  def players(self) -> Set[Tuple]:
+    """
+    Returns a set with all players in the fight
+    """
+
+    return self.q.filter(
+        Predicate.isPlayerAction()
+    ).map(
+        Predicate.getActorInfo()
+    ).set()
+
+  @property
+  def hostile_action(self):
+    # Hostile NPCs & (some of) Their Actions
+    self.q.filter(
+        Predicate.isCreatureAction()
+    ).filter(
+        Predicate.isActorHostile()
+    ).map(
+        (Predicate.getActor(), Predicate.getEvent())
+    ).set()
+
+  def actor_actions(self, actor):
+    return self.q.filter(
+        Predicate.isActor(actor)
+    ).map(
+        (
+            Predicate.getAction(),
+            Predicate.getEvent(),
+            Predicate.getTarget()
+        )
+    ).list()
