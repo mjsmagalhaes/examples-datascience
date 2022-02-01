@@ -92,6 +92,11 @@ class Query:
   def sort(self, key=None, reverse=False):
     return Query(sorted(self.iter(), key=key, reverse=reverse))
 
+  # --- Semi-Finalizers ---
+
+  def qlist(self):
+    return Query(self.list())
+
   # --- Finalizers ---
 
   def set(self) -> Set:
@@ -140,11 +145,11 @@ class Predicate:
   """
   @staticmethod
   def isTarget(target) -> FilterPredicate:
-    return lambda x: x['target'] == target
+    return lambda x: x.target == target
 
   @staticmethod
   def isActor(actor) -> FilterPredicate:
-    return lambda x: x['actor'] == actor
+    return lambda x: x.actor == actor
 
   @staticmethod
   def isActorHostile() -> FilterPredicate:
@@ -154,15 +159,15 @@ class Predicate:
 
   @staticmethod
   def isAction(action) -> FilterPredicate:
-    return lambda x: x['action'] == action
+    return lambda x: x.action == action
 
   @staticmethod
   def isPlayerAction() -> FilterPredicate:
-    return lambda x: x['actor_tag'] == 'Player' and x['actor'] != '0'
+    return lambda x: x.actor_tag == 'Player' and x.actor != '0'
 
   @staticmethod
   def isCreatureAction() -> FilterPredicate:
-    return lambda x: x['actor_tag'] == 'Creature'
+    return lambda x: x.actor_tag == 'Creature'
 
   # --- Events ---
   @staticmethod
@@ -186,7 +191,7 @@ class Predicate:
   # --- Getters ---
 
   def getData() -> MapPredicate:
-    return lambda x: x.rawdata
+    return lambda x: x.data
 
   def getEvent() -> MapPredicate:
     return lambda x: x.event
@@ -199,16 +204,16 @@ class Predicate:
   # --- Getters: Actor ---
 
   def getActor() -> MapPredicate:
-    return lambda x: x['actor']
+    return lambda x: x.actor
 
   def getActorTag() -> MapPredicate:
-    return lambda x: x['actor_tag']
+    return lambda x: x.actor_tag
 
   def getActorId() -> MapPredicate:
-    return lambda x: x['actor_id']
+    return lambda x: x.actor_id
 
   def getActorFlags() -> MapPredicate:
-    return lambda x: x['actor_flags']
+    return lambda x: x.actor_flags
 
   @classmethod
   def getActorInfo(cls) -> MapPredicate:
@@ -221,16 +226,16 @@ class Predicate:
   # --- Getters: Target ---
 
   def getTarget() -> MapPredicate:
-    return lambda x: x['target']
+    return lambda x: x.target
 
   def getTargetTag() -> MapPredicate:
-    return lambda x: x['target_tag']
+    return lambda x: x.target_tag
 
   def getTargetId() -> MapPredicate:
-    return lambda x: x['target_id']
+    return lambda x: x.target_id
 
   def getTargetFlags() -> MapPredicate:
-    return lambda x: x['target_flags']
+    return lambda x: x.target_flags
 
   @classmethod
   def getTargetInfo(cls) -> MapPredicate:
@@ -243,4 +248,4 @@ class Predicate:
   # --- Getters: Actions ---
 
   def getAction() -> MapPredicate:
-    return lambda x: x['action']
+    return lambda x: x.action
