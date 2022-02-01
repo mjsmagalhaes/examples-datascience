@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+
 import pandas as pd
 import datatable as dt
 import datetime as date
 
-from typing import Any, Union, List, Tuple, Callable
+from itertools import groupby
+from more_itertools import ilen, islice_extended, groupby_transform
+from typing import Any, Dict, Set, Union, List, Tuple, Callable
 
 FilterPredicate = Callable[[Any], bool]
 
@@ -17,7 +20,7 @@ class Query:
   A class to create a chain of iterators to help the analysis.
   """
 
-  def __init__(self, data, inPlace=True):
+  def __init__(self, data):
     # print('New Query')
     self.data = data
 
@@ -63,16 +66,45 @@ class Query:
 
     return self.apply(filter, fn, self.iter())
 
+  # def groupby(self, key, fn=list) -> Query:
+  #   it = groupby(sorted(self.iter(), key=key), key=key)
+
+  #   if fn != None:
+  #     it = map(lambda x: (x[0], fn(x[1])), it)
+
+  #   return Query(it)
+
+  def groupby(self, keyfn, valuefn=None, reducefn=list) -> Query:
+    """
+    A wrapper around itertools.groupby function to create a chainable interface.
+
+    Args:
+      key: A function that will be called to determine by which value entries will be grouped by.
+
+    Returns:
+      The iterator wrapped in a Query object.
+    """
+    return Query(groupby_transform(self.sort(keyfn).iter(), keyfn, valuefn, reducefn))
+
+  def slice(self, start=0, stop=None, step=1):
+    return Query(islice_extended(self.iter(), start, stop, step))
+
+  def sort(self, key=None, reverse=False):
+    return Query(sorted(self.iter(), key=key, reverse=reverse))
+
   # --- Finalizers ---
 
-  def set(self):
+  def set(self) -> Set:
     return set(self.iter())
 
-  def list(self):
+  def list(self) -> List:
     return list(self.iter())
 
-  def tuple(self):
+  def tuple(self) -> Tuple:
     return tuple(self.iter())
+
+  def dict(self) -> Dict:
+    return dict(self.iter())
 
   def pandas(self, columns: Union[List[str], None] = None) -> pd.DataFrame:
     """
@@ -97,6 +129,9 @@ class Query:
       A Datatable Frame
     """
     return dt.Frame(self.pandas(columns=columns))
+
+  def len(self):
+    return ilen(self.iter())
 
 
 class Predicate:

@@ -1,12 +1,14 @@
-# Install SpyderIDE Support and Jupyter
+## Install SpyderIDE Support and Jupyter
 # pip install spyder-kernels 
 # jupyter 
 # jupyterlab
-# Numerical Support
+## Numerical Support
 # numpy 
 pandas
 datatable
-# Graphics
+## Iterables
+more_itertools
+## Graphics
 # matplotlib seaborn altair graphviz plotly
 # Machine Learning
 # sklearn statsmodels

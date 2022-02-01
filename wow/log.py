@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import datetime as date
 
-from typing import List, Set, Tuple
-
 from IPython.display import display, Markdown as md
+from itertools import islice
+from more_itertools import ilen
+from typing import List, Set, Tuple
 
 from .query import Query, Predicate
 
@@ -24,10 +25,14 @@ class Record:
   """
 
   def __init__(self, log: str):
-    self.idx = log[0]
-    self.timestamp, rawdata = log[1].split('  ')
-    self.rawdata = rawdata.split(',')
-    self.event = self.rawdata[0]
+    try:
+      self.idx = log[0]
+      self.timestamp, rawdata = log[1].split('  ')
+      self.rawdata = rawdata.split(',')
+      self.event = self.rawdata[0]
+    except:
+      print(log)
+      raise Exception('BOOM.')
 
     if(self.event in [
         'COMBAT_LOG_VERSION', 'ZONE_CHANGE', 'MAP_CHANGE',
@@ -117,14 +122,16 @@ class Encounter:
     beg = qLog.filter(Predicate.isEncounterStart())
     end = qLog.filter(Predicate.isEncounterEnd())
 
-    encounters = Query(zip(beg, end)).map(lambda x: Encounter(log, x[0], x[1]))
+    encounters = Query(zip(beg, end)).map(
+        lambda x: Encounter(log, x[0], x[1])
+    )
 
     e = encounters.filter(
         lambda x: x.duration.total_seconds() > 60
     ).list()
     print(len(encounters.list()), ' => ', len(e))
 
-    return e
+    return (log, e)
 
   def __init__(self, log, beg, end):
     self.beg = beg
@@ -142,10 +149,13 @@ class Encounter:
     self.id = int(beg.rawdata[1])
     self.name = beg.rawdata[2]
 
-    self.log = log[beg.idx: end.idx]
+    self.log = log
 
   def __repr__(self) -> str:
     return self.text()
+
+  def __iter__(self):
+    return self.iter
 
   def title(self) -> str:
     return f'{self.name} {self.duration.seconds // 60}:{self.duration.seconds % 60:02d}'
@@ -164,17 +174,21 @@ g {{ color: Green }}
 - {0} entries in **{duration}**
 - {end.event} (log: {end.idx})
   - *{timestamp_end}*
-    """.format(len(self.log), **self.__dict__)
+    """.format(ilen(self.iter), **self.__dict__)
 
   def md(self):
     display(md(self.text()))
 
   @property
   def q(self):
-    return Query(self.log)
+    return Query(self.iter)
 
   @property
-  def players(self) -> Set[Tuple]:
+  def iter(self):
+    return islice(self.log, self.beg.idx, self.end.idx + 1)
+
+  @property
+  def players(self) -> Query:
     """
     Returns a set with all players in the fight
     """
@@ -186,17 +200,17 @@ g {{ color: Green }}
     ).set()
 
   @property
-  def hostile_action(self):
+  def hostile_action(self) -> Query:
     # Hostile NPCs & (some of) Their Actions
-    self.q.filter(
+    return self.q.filter(
         Predicate.isCreatureAction()
     ).filter(
         Predicate.isActorHostile()
     ).map(
         (Predicate.getActor(), Predicate.getEvent())
-    ).set()
+    )
 
-  def actor_actions(self, actor):
+  def actor_actions(self, actor) -> Query:
     return self.q.filter(
         Predicate.isActor(actor)
     ).map(
@@ -205,4 +219,17 @@ g {{ color: Green }}
             Predicate.getEvent(),
             Predicate.getTarget()
         )
-    ).list()
+    )
+
+  def actions(self, event, action) -> Query:
+    return self.q.filter(
+        Predicate.isEvent(event)  # 'SPELL_AURA_APPLIED'
+    ).filter(
+        Predicate.isAction(action)  # '"Sorrowful Procession"'
+    ).map(
+        (
+            Predicate.getTimestamp(),
+            Predicate.getActorId(),
+            Predicate.getTarget()
+        )
+    )
