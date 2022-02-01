@@ -74,13 +74,16 @@ class Record:
     return '{timestamp}: {event}'.format(**self.__dict__)
 
   def __repr__(self) -> str:
-    return '{timestamp}: {event} entry: {idx}'.format(**self.__dict__)
+    return f'{self.timestamp}: {self.event} entry: {self.idx}\n{self.rawdata}'
 
   def __getitem__(self, idx):
     if type(idx) is str:
       return self.__dict__.get(idx, None)
     if type(idx) is int:
-      return self.data[idx]
+      try:
+        return self.data[idx]
+      except IndexError:
+        return None
     else:
       return None
 
@@ -90,19 +93,19 @@ class Record:
 
   @property
   def event(self):
-    return self.data[0]
+    return self[0]
 
   @property
   def actor_id(self):
-    return self.data[1]
+    return self[1]
 
   @property
   def actor(self):
-    return self.data[2]
+    return self[2]
 
   @property
   def actor_flags(self):
-    return self.data[3]
+    return self[3]
 
   @property
   def actor_tag(self) -> Mask:
@@ -114,15 +117,15 @@ class Record:
 
   @property
   def target_id(self):
-    return self.data[5]
+    return self[5]
 
   @property
   def target(self):
-    return self.data[6]
+    return self[6]
 
   @property
   def target_flags(self):
-    return self.data[7]
+    return self[7]
 
   @property
   def target_tag(self) -> Mask:
@@ -134,11 +137,11 @@ class Record:
 
   @property
   def action_id(self):
-    return self.data[9]
+    return self[9]
 
   @property
   def action(self):
-    return self.data[10]
+    return self[10]
 
   def parse_actor(self):
     pass

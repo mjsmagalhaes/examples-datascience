@@ -97,6 +97,9 @@ class Query:
   def qlist(self):
     return Query(self.list())
 
+  def qset(self):
+    return Query(self.set())
+
   # --- Finalizers ---
 
   def set(self) -> Set:
@@ -249,3 +252,6 @@ class Predicate:
 
   def getAction() -> MapPredicate:
     return lambda x: x.action
+
+  def getActionId() -> MapPredicate:
+    return lambda x: x.action_id
