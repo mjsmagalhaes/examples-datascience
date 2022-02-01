@@ -112,7 +112,10 @@ class Encounter:
   """
 
   @staticmethod
-  def parse(logLines) -> List[Encounter]:
+  def parse(file: str) -> Tuple[List[Record], List[Encounter]]:
+    with open(file, 'r', encoding='utf-8') as filePtr:
+      logLines = filePtr.readlines()
+
     # Create Record List
     log = Query(enumerate(logLines)).map(lambda x: Record(x)).list()
 
