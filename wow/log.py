@@ -10,6 +10,15 @@ from typing import Union, List, Set, Tuple, Dict
 from wow import ENCOUNTER_DATA
 from wow.query import Query, Predicate
 
+# https://wowpedia.fandom.com/wiki/DifficultyID
+
+cDifficulty = {
+    '7': 'LFR',
+    '14': 'Normal',
+    '15': 'Heroic',
+    '16': 'Mythic'
+}
+
 
 class Mask:
   def __init__(self, flags):
@@ -58,7 +67,7 @@ class Record:
   #   return '{timestamp}: {event}'.format(**self.__dict__)
 
   def __repr__(self) -> str:
-    return f'{self.timestamp}: {self.event} entry: {self.idx}\n{self.rawdata}'
+    return f'{self.idx} - {self.timestamp}: {self.rawdata}'
 
   def __getitem__(self, idx):
     if type(idx) is str:
@@ -169,8 +178,6 @@ class Encounter:
         end.timestamp, '%m/%d %H:%M:%S.%f'
     ).replace(year=2022)
 
-    self.duration = self.timestamp_end - self.timestamp_begin
-
     try:
       self.id = int(beg.data[1])
       self.name = beg.data[2]
@@ -187,8 +194,21 @@ class Encounter:
     return self.iter()
 
   @property
-  def q(self):
+  def q(self) -> Query:
     return self.log
+
+  # NOTE: There is a minor difference in miliseconds between
+  # duration (calculated from encounter_start / encounter_end timestamp) and
+  # log_duration (extracted from the log)
+  @property
+  def duration(self) -> date.timedelta:
+    return self.timestamp_end - self.timestamp_begin
+
+  @property
+  def log_duration(self):
+    return str(
+        date.timedelta(microseconds=int(self.end[6]) * 1000)
+    )
 
   @property
   def title(self) -> str:
@@ -203,13 +223,19 @@ o {{ color: Orange }}
 g {{ color: Green }}
 </style>
 
-## <sb>{name} (id: {id})</sb>
-- {beg.event} (log: {beg.idx})
-  - *{timestamp_begin}*  
-- {0} entries in **{duration}**
-- {end.event} (log: {end.idx})
-  - *{timestamp_end}*
-""".format(self.q.len(), **self.__dict__)
+## <sb>{0.difficulty} {0.name} {0.result} (id: {0.id})</sb>
+- {0.beg}
+- {1} entries in **{0.log_duration}** / {0.duration}
+- {0.end}
+""".format(self, self.q.len())
+
+  @property
+  def difficulty(self):
+    return cDifficulty.get(self.beg[3], None)
+
+  @property
+  def result(self) -> str:
+    return ['Wipe', 'Kill'][int(self.end[5])]
 
   def md(self):
     display(md(self.text))
