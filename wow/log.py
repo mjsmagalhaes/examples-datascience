@@ -7,6 +7,7 @@ from itertools import chain
 from more_itertools import ilen
 from typing import Union, List, Set, Tuple, Dict
 
+import wow.helper as help
 from wow import ENCOUNTER_DATA
 from wow.query import Query, Predicate
 
@@ -293,6 +294,76 @@ class EncounterReport:
   def showEncounters(self):
     for e in self.data:
       display(e.md())
+
+  def getSpellDamage(self):
+    spellDamage = self.q.filter(
+        Predicate.all([
+            Predicate.any([Predicate.isPlayerAction(),
+                           Predicate.isPetAction()]),
+            Predicate.isTargetHostile(),
+            Predicate.isEventIn([
+                'SPELL_DAMAGE',
+                'SPELL_PERIODIC_DAMAGE',
+                'RANGE_DAMAGE'
+            ]),
+        ])
+    ).map((
+        Predicate.getActorId(),
+        Predicate.getActor(),
+        lambda x: int(x[29])
+    )).groupby(
+        lambda x: tuple(x[0:2]),
+        lambda x: x[2],
+        # lambda x: help.human_format(sum(x))
+        sum
+    ).sort(
+        lambda x: x[1],
+        True
+    ).map(
+        lambda x: (*x[0], x[1])  # help.human_format(x[1])
+    ).pandas(['Unit ID', 'Name', 'Total (Spell)'])
+
+    return spellDamage
+
+  def getMeleeDamage(self):
+    def consolidate(x):
+      return [x.action, x.actor_id][x.action[0:3] == '000']
+
+    meleeDamage = self.q.filter(
+        Predicate.all([
+            Predicate.any([Predicate.isPlayerAction(),
+                           Predicate.isPetAction()]),
+            Predicate.isTargetHostile(),
+            Predicate.isEventIn([
+                'SWING_DAMAGE',
+            ]),
+        ])
+    ).map(
+        (
+            Predicate.getActorId(),
+            consolidate,
+            Predicate.getActor(),
+            lambda x: int(x[26])
+        )
+    ).groupby(
+        lambda x: tuple(x[0:3]),
+        lambda x: x[3],
+        # lambda x: help.human_format(sum(x))
+        sum
+    ).sort(
+        lambda x: x[1],
+        True
+    ).map(
+        lambda x: (*x[0], x[1])  # help.human_format(x[1])
+    ).pandas(['Unit ID', 'Player ID', 'Name', 'Total (Melee)'])
+
+    return meleeDamage
+
+  def getDamage(self):
+    return (
+        self.getSpellDamage(),
+        self.getMeleeDamage()
+    )
 
   def hostile_action(self) -> Query:
     # Hostile NPCs & Their Actions
