@@ -3,8 +3,6 @@ from zipfile import ZipFile
 
 from IPython.display import display, clear_output
 
-from wow.fights import nerzhul
-
 
 def import_file():
   zipText = widgets.Text()
@@ -55,7 +53,7 @@ def import_file():
 def pick_encounter(encounters):
   encDropdown = widgets.Dropdown(
       options=list(map(lambda enc: (
-          str(enc[0] + 1) + ' ' + enc[1].title(), enc[0]), enumerate(encounters))),
+          str(enc[0] + 1) + ' ' + enc[1].title, enc[0]), enumerate(encounters))),
       value=0,
       description='Encounter:',
   )
@@ -73,7 +71,7 @@ def pick_encounter(encounters):
   def update(x):
     with out:
       clear_output()
-      nerzhul.run(encounters[encDropdown.value])
+      encounters[encDropdown.value].report()
 
   encButton.on_click(update)
 

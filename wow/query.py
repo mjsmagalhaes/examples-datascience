@@ -66,14 +66,6 @@ class Query:
 
     return self.apply(filter, fn, self.iter())
 
-  # def groupby(self, key, fn=list) -> Query:
-  #   it = groupby(sorted(self.iter(), key=key), key=key)
-
-  #   if fn != None:
-  #     it = map(lambda x: (x[0], fn(x[1])), it)
-
-  #   return Query(it)
-
   def groupby(self, keyfn, valuefn=None, reducefn=list) -> Query:
     """
     A wrapper around itertools.groupby function to create a chainable interface.
@@ -146,9 +138,20 @@ class Predicate:
   """
   A factory of predicates used in Query.
   """
+
+  # === FILTER Predicates ===
+
+  @staticmethod
+  def isActionCompound() -> FilterPredicate:
+    return lambda r: type(r['action_e1']) == list
+
+  # --- FILTER Predicates: Target ---
+
   @staticmethod
   def isTarget(target) -> FilterPredicate:
     return lambda x: x.target == target
+
+  # --- FILTER Predicates: Actor ---
 
   @staticmethod
   def isActor(actor) -> FilterPredicate:
@@ -158,7 +161,7 @@ class Predicate:
   def isActorHostile() -> FilterPredicate:
     return lambda x: x.actor_mask.hostile == True
 
-  # --- Actions ---
+  # --- FILTER Predicates: Actions ---
 
   @staticmethod
   def isAction(action) -> FilterPredicate:
@@ -172,7 +175,7 @@ class Predicate:
   def isCreatureAction() -> FilterPredicate:
     return lambda x: x.actor_tag == 'Creature'
 
-  # --- Events ---
+  # --- FILTER Predicates: Events ---
   @staticmethod
   def isEvent(type) -> FilterPredicate:
     return lambda x: x.event == type
@@ -185,36 +188,37 @@ class Predicate:
   def isEncounterEnd(cls) -> FilterPredicate:
     return cls.isEvent('ENCOUNTER_END')
 
-  # --- Helpers ---
+  # === MAP Predicates ===
 
   @staticmethod
-  def isActionCompound() -> FilterPredicate:
-    return lambda r: type(r['action_e1']) == list
-
-  # --- Getters ---
-
   def getData() -> MapPredicate:
     return lambda x: x.data
 
+  @staticmethod
   def getEvent() -> MapPredicate:
     return lambda x: x.event
 
+  @staticmethod
   def getTimestamp() -> MapPredicate:
     return lambda x: date.datetime.strptime(
         x.timestamp, '%m/%d %H:%M:%S.%f'
     ).replace(year=2022)
 
-  # --- Getters: Actor ---
+  # --- MAP Predicates: Actor ---
 
+  @staticmethod
   def getActor() -> MapPredicate:
     return lambda x: x.actor
 
+  @staticmethod
   def getActorTag() -> MapPredicate:
     return lambda x: x.actor_tag
 
+  @staticmethod
   def getActorId() -> MapPredicate:
     return lambda x: x.actor_id
 
+  @staticmethod
   def getActorFlags() -> MapPredicate:
     return lambda x: x.actor_flags
 
@@ -226,17 +230,21 @@ class Predicate:
         cls.getActorId()
     )
 
-  # --- Getters: Target ---
+  # --- MAP Predicates: Target ---
 
+  @staticmethod
   def getTarget() -> MapPredicate:
     return lambda x: x.target
 
+  @staticmethod
   def getTargetTag() -> MapPredicate:
     return lambda x: x.target_tag
 
+  @staticmethod
   def getTargetId() -> MapPredicate:
     return lambda x: x.target_id
 
+  @staticmethod
   def getTargetFlags() -> MapPredicate:
     return lambda x: x.target_flags
 
@@ -248,10 +256,12 @@ class Predicate:
         cls.getTargetId()
     )
 
-  # --- Getters: Actions ---
+  # --- MAP Predicates: Actions ---
 
+  @staticmethod
   def getAction() -> MapPredicate:
     return lambda x: x.action
 
+  @staticmethod
   def getActionId() -> MapPredicate:
     return lambda x: x.action_id

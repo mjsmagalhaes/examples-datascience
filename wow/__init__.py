@@ -1,0 +1,1 @@
+ENCOUNTER_DATA = {}

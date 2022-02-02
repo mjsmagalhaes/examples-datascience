@@ -3,14 +3,15 @@ from __future__ import annotations
 import datetime as date
 
 from IPython.display import display, Markdown as md
-from itertools import islice
+from itertools import chain
 from more_itertools import ilen
-from typing import List, Set, Tuple
+from typing import Union, List, Set, Tuple, Dict
 
-from .query import Query, Predicate
+from wow import ENCOUNTER_DATA
+from wow.query import Query, Predicate
 
 
-class Mask():
+class Mask:
   def __init__(self, flags):
     self.flags = self.hex_to_binary(flags)
 
@@ -43,35 +44,18 @@ class Record:
   def __init__(self, log: Tuple[int, str]):
     self.idx = log[0]
     self.timestamp, self.rawdata = log[1].split('  ')
-    # self.data = data.split(',')
-    # data = data.split(',')
-    # self.event = data[0]
 
-    if(self.event in [
-        'COMBAT_LOG_VERSION', 'ZONE_CHANGE', 'MAP_CHANGE',
-        'COMBATANT_INFO',
-        'PARTY_KILL',
-        'ENCOUNTER_START', 'ENCOUNTER_END',
-        'WORLD_MARKER_PLACED', 'WORLD_MARKER_REMOVED',
-        'EMOTE'
-    ]):
-      return
-    # elif self.event in ['ENCOUNTER_START']:
-    #   self.data = data
-    elif self.event in ['UNIT_DIED']:
-      self.parse_actor()
-      self.parse_target()
-    else:
-      try:
-        self.parse_actor()
-        self.parse_target()
-        self.parse_action()
-      except:
-        print(log)
-        raise Exception('BOOM.')
+    # if(self.event in [
+    #     'COMBAT_LOG_VERSION', 'ZONE_CHANGE', 'MAP_CHANGE',
+    #     'COMBATANT_INFO',
+    #     'UNIT_DIED', 'PARTY_KILL',
+    #     'ENCOUNTER_START', 'ENCOUNTER_END',
+    #     'WORLD_MARKER_PLACED', 'WORLD_MARKER_REMOVED',
+    #     'EMOTE'
+    # ]):
 
-  def __str__(self) -> str:
-    return '{timestamp}: {event}'.format(**self.__dict__)
+  # def __str__(self) -> str:
+  #   return '{timestamp}: {event}'.format(**self.__dict__)
 
   def __repr__(self) -> str:
     return f'{self.timestamp}: {self.event} entry: {self.idx}\n{self.rawdata}'
@@ -143,24 +127,6 @@ class Record:
   def action(self):
     return self[10]
 
-  def parse_actor(self):
-    pass
-    # self.actor_id, self.actor = data[1:3]
-    # self.actor_flags = data[3]
-    # self.actor_marks = bin(int(self.data[4], 16))[2:].zfill(64)[::-1]
-    # self.actor_tag, *_ = self.actor_id.split('-')
-
-  def parse_target(self):
-    pass
-    # self.target_id, self.target = self.data[5:7]
-    # self.target_flags = self.data[7]
-    # self.target_marks = bin(int(self.data[8], 16))[2:].zfill(64)[::-1]
-    # self.target_tag, *_ = self.target_id.split('-')
-
-  def parse_action(self):
-    pass
-    # self.action_id, self.action, *self.action_e1 = self.data[9:]
-
 
 class Encounter:
   """
@@ -170,7 +136,7 @@ class Encounter:
   """
 
   @staticmethod
-  def parse(file: str) -> Tuple[Query, List[Encounter]]:  # List[Record]
+  def parse(file: str) -> Tuple[Query, List[Encounter]]:
     with open(file, 'r', encoding='utf-8') as filePtr:
       log = Query(
           enumerate(filePtr.readlines())
@@ -220,9 +186,15 @@ class Encounter:
   def __iter__(self):
     return self.iter()
 
+  @property
+  def q(self):
+    return self.log
+
+  @property
   def title(self) -> str:
     return f'{self.name} {self.duration.seconds // 60}:{self.duration.seconds % 60:02d}'
 
+  @property
   def text(self):
     return """
 <style>
@@ -237,20 +209,44 @@ g {{ color: Green }}
 - {0} entries in **{duration}**
 - {end.event} (log: {end.idx})
   - *{timestamp_end}*
-    """.format(ilen(self.iter()), **self.__dict__)
+""".format(self.q.len(), **self.__dict__)
 
   def md(self):
-    display(md(self.text()))
+    display(md(self.text))
+
+  def iter(self):
+    return self.q.iter()
+
+  def getReport(self) -> EncounterReport:
+    return ENCOUNTER_DATA.get(self.id, EncounterReport)(self)
+
+
+class EncounterReport:
+  """
+  A pré-defined Query
+  """
+
+  def __init__(self, encounters: Union[Encounter, List[Encounter], Tuple[Encounter], Query]) -> None:
+    if type(encounters) in [list, tuple]:
+      self.data = encounters
+    else:
+      self.data = [encounters]
 
   @property
   def q(self):
-    return self.log
-
-  def iter(self):
-    return islice(self.q.iter(), self.beg.idx, self.end.idx + 1)
+    return Query(chain(*self.data))
 
   @property
-  def players(self) -> Query:
+  def e(self):
+    if(len(self.data) == 1):
+      return self.data[0]
+    else:
+      return None
+
+  def report(self):
+    self.showEncounters()
+
+  def listPlayers(self) -> Set:
     """
     Returns a set with all players in the fight
     """
@@ -261,16 +257,39 @@ g {{ color: Green }}
         Predicate.getActorInfo()
     ).set()
 
-  @property
+  def listEncounters(self):
+    return self.q.filter(Predicate.isEncounterStart()).list()
+
+  def showEncounters(self):
+    for e in self.data:
+      display(e.md())
+
   def hostile_action(self) -> Query:
-    # Hostile NPCs & (some of) Their Actions
+    # Hostile NPCs & Their Actions
     return self.q.filter(
         Predicate.isCreatureAction()
     ).filter(
         Predicate.isActorHostile()
     ).map(
-        (Predicate.getActor(), Predicate.getEvent())
-    )
+        (Predicate.getActor(), Predicate.getEvent(), Predicate.getAction())
+    ).groupby(
+        lambda x: x[0],
+        lambda x: x[1],
+        set
+    ).dict()
+
+  def hostile_action2(self) -> Query:
+    return self.q.filter(
+        Predicate.isCreatureAction()
+    ).filter(
+        Predicate.isActorHostile()
+    ).map(
+        (Predicate.getActionId(), Predicate.getAction(),
+         Predicate.getActor(), Predicate.getEvent())
+    ).qset(
+    ).sort(
+        lambda x: x[1]
+    ).list()
 
   def actor_actions(self, actor) -> Query:
     return self.q.filter(
@@ -295,3 +314,10 @@ g {{ color: Green }}
             Predicate.getTarget()
         )
     )
+
+  @classmethod
+  def groupActionByActor(self, event, action) -> Dict[str, Tuple]:
+    return self.actions(self.q, event, action).groupby(
+        lambda x: x[1],
+        lambda x: x[2],
+    ).dict()
