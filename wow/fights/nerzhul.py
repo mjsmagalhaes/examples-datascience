@@ -10,6 +10,9 @@ from wow.log import EncounterReport
 
 
 class NerzhulReport(EncounterReport):
+  def highlightStyle(self):
+    return 'color: yellow; font-weight: bold'
+
   def report(self):
     self.showEncounters()
     (orbSpawned, orbDisposed) = self.getOrbInfo()
@@ -69,7 +72,7 @@ class NerzhulReport(EncounterReport):
     idx = orbDisposed.sort_values('ID').duplicated(subset='ID', keep=False)
 
     tableCarriers = orbDisposed.sort_values('ID').style.applymap(
-        lambda x: 'color: blue; font-weight: bold', subset=pd.IndexSlice[idx, :]
+        lambda x: self.highlightStyle(), subset=pd.IndexSlice[idx, :]
     ).set_caption('List of Orb Carriers').set_table_styles([{
         'selector': 'caption',
         'props': [
@@ -117,7 +120,7 @@ class NerzhulReport(EncounterReport):
     ]
 
     tableOverview = table.style.applymap(
-        lambda x: 'color: blue; font-weight: bold', subset=pd.IndexSlice[:, ['Time Elapsed']]
+        lambda x: self.highlightStyle(), subset=pd.IndexSlice[:, ['Time Elapsed']]
     ).applymap(
         lambda x: 'color: aqua', subset=pd.IndexSlice[:, ['TimeStamp Spawned', 'TimeStamp Disposed']]
     ).set_caption('Orb Lifespan Overview').set_table_styles([{
