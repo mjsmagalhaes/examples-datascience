@@ -5,7 +5,8 @@ import pandas as pd
 import datatable as dt
 import datetime as date
 
-from itertools import groupby
+from functools import reduce
+# from itertools import groupby,
 from more_itertools import ilen, islice_extended, groupby_transform
 from typing import Any, Dict, Set, Union, List, Tuple, Callable
 
@@ -92,6 +93,9 @@ class Query:
   def qset(self):
     return Query(self.set())
 
+  def reduce(self, fn):
+    return reduce(fn, self.iter())
+
   # --- Finalizers ---
 
   def set(self) -> Set:
@@ -142,6 +146,14 @@ class Predicate:
   # === FILTER Predicates ===
 
   @staticmethod
+  def any(fns):
+    return lambda x: any(map(lambda f: f(x), fns))
+
+  @staticmethod
+  def all(fns):
+    return lambda x: all(map(lambda f: f(x), fns))
+
+  @staticmethod
   def isActionCompound() -> FilterPredicate:
     return lambda r: type(r['action_e1']) == list
 
@@ -150,6 +162,10 @@ class Predicate:
   @staticmethod
   def isTarget(target) -> FilterPredicate:
     return lambda x: x.target == target
+
+  @staticmethod
+  def isTargetHostile() -> FilterPredicate:
+    return lambda x: x.target_mask.hostile == True
 
   # --- FILTER Predicates: Actor ---
 
@@ -168,8 +184,15 @@ class Predicate:
     return lambda x: x.action == action
 
   @staticmethod
+  def isActionId(id: int) -> FilterPredicate:
+    return lambda x: x.action_id == id
+
+  @staticmethod
   def isPlayerAction() -> FilterPredicate:
     return lambda x: x.actor_tag == 'Player' and x.actor != '0'
+
+  def isPetAction() -> FilterPredicate:
+    return lambda x: x.actor_tag == 'Pet' and x.actor != '0'
 
   @staticmethod
   def isCreatureAction() -> FilterPredicate:
@@ -177,16 +200,16 @@ class Predicate:
 
   # --- FILTER Predicates: Events ---
   @staticmethod
-  def isEvent(type) -> FilterPredicate:
-    return lambda x: x.event == type
+  def isEventIn(event_list: List[str]) -> FilterPredicate:
+    return lambda x: x.event in event_list
 
   @classmethod
   def isEncounterStart(cls) -> FilterPredicate:
-    return cls.isEvent('ENCOUNTER_START')
+    return cls.isEventIn(['ENCOUNTER_START'])
 
   @classmethod
   def isEncounterEnd(cls) -> FilterPredicate:
-    return cls.isEvent('ENCOUNTER_END')
+    return cls.isEventIn(['ENCOUNTER_END'])
 
   # === MAP Predicates ===
 

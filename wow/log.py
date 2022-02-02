@@ -129,11 +129,15 @@ class Record:
     return Mask(self.target_flags)
 
   @property
-  def action_id(self):
-    return self[9]
+  def action_id(self) -> int:
+    r = self[9]
+    if r:
+      return int(r)
+    else:
+      return None
 
   @property
-  def action(self):
+  def action(self) -> str:
     return self[10]
 
 
@@ -188,7 +192,7 @@ class Encounter:
     self.log = log.slice(self.beg.idx, self.end.idx + 1).qlist()
 
   def __repr__(self) -> str:
-    return self.text()
+    return self.text
 
   def __iter__(self):
     return self.iter()
