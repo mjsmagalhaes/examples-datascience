@@ -71,7 +71,7 @@ def pick_encounter(encounters):
   def update(x):
     with out:
       clear_output()
-      encounters[encDropdown.value].report()
+      encounters[encDropdown.value].getReport().report()
 
   encButton.on_click(update)
 
