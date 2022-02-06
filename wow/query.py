@@ -218,14 +218,20 @@ class Predicate:
     return lambda x: x.data
 
   @staticmethod
+  def getRawData() -> MapPredicate:
+    return lambda x: x.rawdata
+
+  @staticmethod
   def getEvent() -> MapPredicate:
     return lambda x: x.event
 
   @staticmethod
   def getTimestamp() -> MapPredicate:
-    return lambda x: date.datetime.strptime(
-        x.timestamp, '%m/%d %H:%M:%S.%f'
-    ).replace(year=2022)
+    return lambda x: x.getTimestamp()
+
+  @staticmethod
+  def getTimestampString() -> MapPredicate:
+    return lambda x: x.getTimestampString()
 
   # --- MAP Predicates: Actor ---
 

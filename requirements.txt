@@ -8,6 +8,8 @@ pandas
 datatable
 ## Iterables
 more_itertools
+## Database
+peewee
 ## Graphics
 # matplotlib seaborn altair graphviz plotly
 # Machine Learning

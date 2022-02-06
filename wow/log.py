@@ -1,15 +1,20 @@
 from __future__ import annotations
 
 import datetime as date
+# import json
+import peewee
 
 from IPython.display import display, Markdown as md
 from itertools import chain
-from more_itertools import ilen
+from more_itertools import take
+from zipfile import ZipFile, ZIP_DEFLATED
 from typing import Union, List, Set, Tuple, Dict
 
 import wow.helper as help
 from wow import ENCOUNTER_DATA
 from wow.query import Query, Predicate
+
+EncounterDBProxy = peewee.DatabaseProxy()
 
 # https://wowpedia.fandom.com/wiki/DifficultyID
 
@@ -141,6 +146,14 @@ class Record:
   def action(self) -> str:
     return self[10]
 
+  def getTimestamp(self) -> data.datetime:
+    return date.datetime.strptime(
+        self.timestamp, '%m/%d %H:%M:%S.%f'
+    ).replace(year=2022)
+
+  def getTimestampString(self) -> str:
+    return self.getTimestamp().isoformat()
+
 
 class Encounter:
   """
@@ -149,28 +162,8 @@ class Encounter:
   A encounter starts with the event ENCOUNTER_START and finishes with a ENCOUNTER_END event.
   """
 
-  @staticmethod
-  def parse(file: str) -> Tuple[Query, List[Encounter]]:
-    with open(file, 'r', encoding='utf-8') as filePtr:
-      log = Query(
-          enumerate(filePtr.readlines())
-      ).map(
-          lambda x: Record(x)
-      ).qlist()
-
-    # Split Encounters
-    encounters = Query(zip(
-        log.filter(Predicate.isEncounterStart()),
-        log.filter(Predicate.isEncounterEnd())
-    )).map(
-        lambda x: Encounter(log, x[0], x[1])
-    ).filter(
-        lambda x: x.duration.total_seconds() > 60
-    ).list()
-
-    print('Encounters: ', len(encounters))
-
-    return (log, encounters)
+  def from_db() -> List[Encounter]:
+    pass
 
   def __init__(self, log: Query, beg: Record, end: Record):
     self.beg = beg
@@ -250,6 +243,15 @@ g {{ color: Green }}
 
   def getReport(self) -> EncounterReport:
     return ENCOUNTER_DATA.get(self.id, EncounterReport)(self)
+
+  def export(self) -> List[Tuple[str, str, str]]:
+    return self.q.map(
+        (
+            Predicate.getTimestampString(),
+            Predicate.getEvent(),
+            Predicate.getRawData()
+        )
+    ).iter()
 
 
 class EncounterReport:
@@ -422,3 +424,93 @@ class EncounterReport:
         lambda x: x[1],
         lambda x: x[2],
     ).dict()
+
+
+class EncounterDB(peewee.Model):
+  """
+  """
+  id = peewee.AutoField()
+  # encounter_id = peewee.IntegerField()
+  timestamp = peewee.TextField()
+  event = peewee.TextField()
+  # actor = peewee.TextField()
+  rawdata = peewee.TextField()
+
+  class Meta:
+    database = EncounterDBProxy
+
+  @classmethod
+  def save(cls, q: Query, idx, page_size=300):
+    events = q.export()
+    page = take(page_size, events)
+
+    # print(len(events) / page_size)
+
+    while page:
+      cls.insert_many(page, fields=[
+          cls.timestamp,
+          cls.event,
+          cls.rawdata
+      ]).execute()
+
+      page = take(page_size, events)
+
+
+class Log:
+  @staticmethod
+  def parse(file: str) -> Log:
+    with open(file, 'r', encoding='utf-8') as filePtr:
+      log = Query(
+          enumerate(filePtr.readlines())
+      ).map(
+          lambda x: Record(x)
+      ).qlist()
+
+    # Split Encounters
+    encounters = Query(zip(
+        log.filter(Predicate.isEncounterStart()),
+        log.filter(Predicate.isEncounterEnd())
+    )).map(
+        lambda x: Encounter(log, x[0], x[1])
+    ).filter(
+        lambda x: x.duration.total_seconds() > 60
+    ).list()
+
+    print('Encounters: ', len(encounters))
+
+    return Log(log, encounters)
+
+  def __init__(self, log, encounters: List[Encounter]):
+    self.log = log
+    self.encounters = encounters
+
+  def save_encounters(self, page_size=300) -> None:
+    events = Query(chain(*self.encounters)).map(
+        (
+            Predicate.getTimestampString(),
+            Predicate.getEvent(),
+            Predicate.getRawData()
+        )
+    ).iter()
+
+    file = self.encounters[0].timestamp_begin.strftime('encounters_%Y_%m_%d')
+    filePath = f'wow/{file}.db'
+    zipPath = f'wow/{file}.zip'
+
+    with peewee.SqliteDatabase(filePath) as db:
+      EncounterDBProxy.initialize(db)
+      EncounterDB.create_table()
+      with db.atomic():
+        page = take(page_size, events)
+
+        while page:
+          EncounterDB.insert_many(page, fields=[
+              EncounterDB.timestamp,
+              EncounterDB.event,
+              EncounterDB.rawdata
+          ]).execute()
+
+          page = take(page_size, events)
+
+    with ZipFile(zipPath, 'w', compression=ZIP_DEFLATED, compresslevel=6) as z:
+      z.write(filePath)
