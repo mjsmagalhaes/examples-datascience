@@ -407,7 +407,7 @@ class EncounterReport:
 
   def actions(self, event, action) -> Query:
     return self.q.filter(
-        Predicate.isEvent(event)  # 'SPELL_AURA_APPLIED'
+        Predicate.isEventIn(event)  # 'SPELL_AURA_APPLIED'
     ).filter(
         Predicate.isAction(action)  # '"Sorrowful Procession"'
     ).map(

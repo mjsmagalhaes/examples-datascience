@@ -25,7 +25,7 @@ class NerzhulReport(EncounterReport):
     """
 
     return self.q.filter(
-        Predicate.isEvent('SPELL_AURA_APPLIED')
+        Predicate.isEventIn(['SPELL_AURA_APPLIED'])
     ).filter(
         Predicate.isAction('"Eternal Torment"')
     ).map(
@@ -41,7 +41,7 @@ class NerzhulReport(EncounterReport):
     """
 
     return self.q.filter(
-        Predicate.isEvent('SPELL_AURA_APPLIED')
+        Predicate.isEventIn(['SPELL_AURA_APPLIED'])
     ).filter(
         Predicate.isAction('"Sorrowful Procession"')
     ).map(
