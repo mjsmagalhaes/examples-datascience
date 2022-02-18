@@ -1,8 +1,10 @@
 import pandas as pd
 
 from os import path
+from zipfile import ZipFile, ZIP_DEFLATED
 
 # tokens_to_remove = ['/n']
+suffix = ['', 'K', 'M', 'B', 'T', 'P']
 
 
 def replace_csv_header(dataFile, headerFile, csvFile=None, header=None):
@@ -29,3 +31,13 @@ def replace_csv_header(dataFile, headerFile, csvFile=None, header=None):
     csvFile = p[0] + '.csv'
 
   data.to_csv(csvFile)
+
+
+def unzip(file, dir):
+  with ZipFile(file) as file:
+    file.extractall(dir)
+
+
+def zip(zipPath, filePath):
+  with ZipFile(zipPath, 'w', compression=ZIP_DEFLATED, compresslevel=6) as z:
+    z.write(filePath)
