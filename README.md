@@ -11,6 +11,19 @@ My data science adventures.
 - other folders (with dataset names)
   - they contain scripts used in the analysis of that specific dataset
 
+### Notebook Names
+
+- example\_
+
+  - An example of how to do something
+
+- data\_
+
+  - Those notebooks are about datasets (usually in the data folder unless when too big to add to git like WoWs).
+
+- course\_
+  - Notebooks created for courses exercices.
+
 ## Some Projects in this Repository
 
 Those projects are in better shape but still considered a WIP.
@@ -19,3 +32,8 @@ Those projects are in better shape but still considered a WIP.
 
 - [World of Warcraft Log](wow_log.ipynb)
 - [Forest Fires (ICU Database)](forest_fires.ipynb)
+
+# Companies Open Source Sites (Related to Data Science)
+
+- [Spotify](https://spotify.github.io/)
+- [Netflix](https://netflix.github.io/)
