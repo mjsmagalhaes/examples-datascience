@@ -2,6 +2,10 @@
 
 My data science adventures.
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mjsmagalhaes/examples-datascience/HEAD?labpath=wow_log.ipynb)
+
+Projects here are considered WIP.
+
 ## Folder Structure:
 
 - dslib
@@ -24,16 +28,12 @@ My data science adventures.
 - course\_
   - Notebooks created for courses exercices.
 
-## Some Projects in this Repository
-
-Those projects are in better shape but still considered a WIP.
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mjsmagalhaes/examples-datascience/HEAD?labpath=wow_log.ipynb)
-
-- [World of Warcraft Log](wow_log.ipynb)
-- [Forest Fires (ICU Database)](forest_fires.ipynb)
-
 # Companies Open Source Sites (Related to Data Science)
 
 - [Spotify](https://spotify.github.io/)
 - [Netflix](https://netflix.github.io/)
+
+# Datasets
+
+- [UCI New Site](https://archive-beta.ics.uci.edu/)
+- [Brazilian Gvt.](https://brasil.io/datasets/)
