@@ -134,7 +134,7 @@ class plot:
         **params.get('encode', {})
     ).properties(
         **params.get('properties', {})
-    )
+    ).interactive()
 
   def histogram_all(
       self,
@@ -169,7 +169,7 @@ class plot:
     ).encode(
         x=alt.X(
             'value:N',
-            title='Variable',
+            title=None,
             **params.get('x', {'bin': {'maxbins': 30}})
         ),
         y=alt.Y('count():Q', **params.get('y', {})),
@@ -190,7 +190,7 @@ class plot:
   def boxplot(self, data, x, y):
     return alt.Chart(data).mark_boxplot().encode(
         x=x, y=y
-    )
+    ).interactive()
 
   def boxplot_all(self, data: pd.DataFrame, attrib_list=None):
     return alt.Chart(data).transform_fold(
@@ -205,7 +205,7 @@ class plot:
     ).configure_axis(
         labelFontSize=14,
         titleFontSize=14
-    )
+    ).interactive()
 
   def corr_heatmap(self, data: pd.DataFrame):
     corrMatrix = data.corr().reset_index().melt('index')
@@ -229,4 +229,6 @@ class plot:
         )
     )
 
-    return chart.transform_filter("datum.var1 <= datum.var2")
+    return chart.transform_filter("datum.var1 <= datum.var2").configure_axis(
+        labelFontSize=12
+    ).interactive()
