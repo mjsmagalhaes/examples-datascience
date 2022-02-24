@@ -26,12 +26,13 @@ Projects here are considered WIP.
   - Those notebooks are about datasets (usually in the data folder unless when too big to add to git like WoWs).
 
 - course\_
-  - Notebooks created for courses exercices.
+  - Notebooks created for courses labs.
 
 # Companies Open Source Sites (Related to Data Science)
 
 - [Spotify](https://spotify.github.io/)
 - [Netflix](https://netflix.github.io/)
+- [Deezer](https://deezer.github.io/)
 
 # Datasets
 
