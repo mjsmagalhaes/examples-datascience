@@ -3,18 +3,18 @@ import pandas as pd
 from ipywidgets import widgets, Layout
 
 
-def describe_numerical(data):
+def describe_numerical(data: pd.DataFrame):
   """
   Describe numerical variables printing basic statistics like: max, min, count, ...
   """
   return data.describe()
 
 
-def describe_category(data):
+def describe_category(data: pd.DataFrame):
   return data.describe(include=['object'])
 
 
-def describe_category_values(data, dtype=['object', 'category']):
+def describe_category_values(data: pd.DataFrame, dtype: list = ['object', 'category']):
   """
   Describe categorical variables by printing the amount of samples each value had.
   """

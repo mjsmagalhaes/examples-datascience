@@ -1,5 +1,5 @@
 ## Install SpyderIDE Support and Jupyter
-# pip install spyder-kernels 
+# spyder-kernels 
 # jupyter 
 # jupyterlab
 ## Numerical Support
@@ -18,11 +18,14 @@ statsmodels
 # NLP Stuff
 nltk 
 spacy
+## Database
+peewee
 ## QoL
 rich
 pydash
 icecream
-## Iterables
+## QoL.Iterables
 more_itertools
-## Database
-peewee
+## Testing
+deal
+hypothesis
