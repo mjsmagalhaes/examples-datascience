@@ -3,11 +3,14 @@
 # jupyter 
 # jupyterlab
 ## Numerical Support
+numpy
 pandas
 pandasgui
 datatable
 ## Graphics
-# matplotlib graphviz plotly
+# graphviz
+matplotlib
+plotly
 seaborn 
 altair
 ## Machine Learning
