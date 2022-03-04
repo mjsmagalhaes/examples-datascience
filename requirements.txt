@@ -5,7 +5,6 @@
 ## Numerical Support
 numpy
 pandas
-pandasgui
 datatable
 ## Graphics
 # graphviz
