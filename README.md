@@ -33,8 +33,14 @@ Projects here are considered WIP.
 - [Spotify](https://spotify.github.io/)
 - [Netflix](https://netflix.github.io/)
 - [Deezer](https://deezer.github.io/)
+- [Uber](https://uber.github.io/)
+- [Meta](https://opensource.fb.com/)
+  - [projects](https://github.com/facebook)
+- [IBM](https://www.ibm.com/opensource/open-projects/)
+  - [projects](https://www.ibm.com/opensource/open-projects/)
 
 # Datasets
 
 - [UCI New Site](https://archive-beta.ics.uci.edu/)
 - [Brazilian Gvt.](https://brasil.io/datasets/)
+- [Public APis](https://github.com/public-apis/public-apis)
