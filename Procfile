@@ -1,1 +1,1 @@
-web: uvicorn --host 0.0.0.0 dslib.web:app
+web: uvicorn dslib.web:app
