@@ -32,6 +32,7 @@ Projects here are considered WIP.
 
 - [Spotify](https://spotify.github.io/)
 - [Netflix](https://netflix.github.io/)
+  - [Metaflow](https://metaflow.org/)
 - [Deezer](https://deezer.github.io/)
 - [Uber](https://uber.github.io/)
 - [Meta](https://opensource.fb.com/)
