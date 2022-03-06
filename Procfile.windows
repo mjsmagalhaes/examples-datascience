@@ -1,1 +1,1 @@
-web: uvicorn --reload --host 0.0.0.0 dslib.web:app
+web: uvicorn --reload dslib.web:app
