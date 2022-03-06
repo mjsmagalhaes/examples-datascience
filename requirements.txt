@@ -1,31 +1,4 @@
-## Install SpyderIDE Support and Jupyter
-# spyder-kernels 
-# jupyter 
-# jupyterlab
-## Numerical Support
-numpy
-pandas
-datatable
-## Graphics
-# graphviz
-matplotlib
-plotly
-seaborn 
-altair
-## Machine Learning
-sklearn 
-statsmodels
-# tensorflow 
-# keras
-# pip install torch==1.10.1+cu113 torchvision==0.11.2+cu113 torchaudio===0.10.1+cu113 -f https://download.pytorch.org/whl/cu113/torch_stable.html
-## Database
-peewee
-## QoL
-rich
-pydash
-icecream
-## QoL.Iterables
-more_itertools
-## Testing
-deal
-hypothesis
+-r _requirements/dslib.txt
+-r _requirements/dash.txt
+-r _requirements/nlp.txt
+-r _requirements/web.txt
