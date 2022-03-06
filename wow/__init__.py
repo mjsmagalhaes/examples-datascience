@@ -1,4 +1,5 @@
 ENCOUNTER_DATA = {}
+
 CLASS_DATA = {
     'Death Knight': '#C41E3A',
     'Demon Hunter': '#A330C9',
@@ -13,6 +14,7 @@ CLASS_DATA = {
     'Warlock': '#8788EE',
     'Warrior': '#C69B6D'
 }
+
 SPECIALIZATION_DATA = {
     250: ('Death Knight', 'Blood', 'Tank'),
     251: ('Death Knight', 'Frost', 'DPS'),
@@ -61,4 +63,13 @@ SPECIALIZATION_DATA = {
     71: ('Warrior', 'Arms', 'DPS'),
     72: ('Warrior', 'Fury', 'DPS'),
     73: ('Warrior', 'Protection', 'Tank'),
+}
+
+# https://wowpedia.fandom.com/wiki/DifficultyID
+
+cDifficulty = {
+    '7': 'LFR',
+    '14': 'Normal',
+    '15': 'Heroic',
+    '16': 'Mythic'
 }
