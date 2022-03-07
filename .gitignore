@@ -73,7 +73,7 @@ target/
 .virtual_documents
 
 # VSCode
-# .vscode
+.vscode
 
 # JetBrains
 .idea
