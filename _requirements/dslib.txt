@@ -1,7 +1,5 @@
-## Install SpyderIDE Support and Jupyter
-# spyder-kernels 
+## Jupyter
 # jupyter 
-# jupyterlab
 ## Numerical Support
 numpy
 pandas
@@ -23,9 +21,5 @@ peewee
 ## QoL
 rich
 pydash
-icecream
 ## QoL.Iterables
 more_itertools
-## Testing
-deal
-hypothesis
