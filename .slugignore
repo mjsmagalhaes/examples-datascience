@@ -1,0 +1,7 @@
+data/
+tests/
+ibm/
+forest_fires/
+restaurant_reviews/
+
+*.ipynb
