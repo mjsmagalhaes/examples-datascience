@@ -13,8 +13,9 @@ COPY . app
 COPY --from=frontend /app/dsapps /app/dsapps
 
 WORKDIR /app
-RUN python -m pip install pip --upgrade
 RUN python -m venv .venv
+ENV PATH="/app/.venv/bin:$PATH"
+RUN python -m pip install pip --upgrade
 RUN pip install -r requirements.txt
 
 ENV PORT 5000
