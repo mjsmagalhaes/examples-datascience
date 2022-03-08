@@ -1,0 +1,6 @@
+uvicorn 
+fastapi[all] 
+fastapi-socketio
+tldextract
+dash_bootstrap_components
+wordcloud

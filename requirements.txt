@@ -1,4 +1,1 @@
--r _requirements/dslib.txt
--r _requirements/dash.txt
--r _requirements/nlp.txt
--r _requirements/web.txt
+-r _requirements/dsapps.txt

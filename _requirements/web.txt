@@ -1,4 +1,0 @@
-uvicorn 
-fastapi[all] 
-fastapi-socketio
-tldextract
