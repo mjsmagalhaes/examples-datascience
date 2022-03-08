@@ -34,7 +34,7 @@ def print_task(task):
 
 def task_export():
     """export notebooks to html"""
-    notebook_list = glob.glob('*.ipynb')
+    notebook_list = glob.glob('notebooks/*.ipynb')
 
     for file in notebook_list:
         yield {
