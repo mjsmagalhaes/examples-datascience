@@ -21,7 +21,9 @@ class Text(BaseModel):
 
 
 BASE_DIR = Path(__file__).resolve().parent
-templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates')))
+templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates/dist')))
+assets = Path(
+    BASE_DIR, 'templates/dist').relative_to(path.abspath(path.curdir))
 static = Path(BASE_DIR, 'images').relative_to(path.abspath(path.curdir))
 
 if not static.exists():
@@ -29,11 +31,12 @@ if not static.exists():
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=str(static)), name="static")
+app.mount("/assets", StaticFiles(directory=str(assets)), name="assets")
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("main.j2", {'request': request})
+    return templates.TemplateResponse("main.html", {'request': request})
 
 
 @app.post("/")

@@ -1,0 +1,28 @@
+{
+  "name": "templates",
+  "version": "0.0.1",
+  "description": "dsapps.wordcloud templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "targets": {
+    "default": {
+      "context": "browser",
+      "source": [
+        "src/main.html"
+      ],
+      "publicUrl": "/wordcloud/assets"
+    }
+  },
+  "devDependencies": {
+    "parcel": "^2.3.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.2",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.8.1"
+  }
+}
