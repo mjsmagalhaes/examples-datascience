@@ -1,5 +1,6 @@
 import glob
 import os.path as path
+from doit import task_params
 from pathlib import Path
 from ruamel.yaml import YAML
 
@@ -59,4 +60,38 @@ def task_test():
     return {
         'actions': ['python -m pytest --html=report.html tests/'],
         'verbosity': 2,
+    }
+
+
+@task_params([
+    {'name': 'build', 'long': 'build', 'type': bool, 'default': False},
+    {'name': 'clear', 'long': 'prune', 'type': bool, 'default': False},
+])
+def task_docker(build, clear):
+    if build:
+        yield {
+            'name': 'docker-build',
+            'actions': ['echo docker build --tag dslib .'],
+            'verbosity': 2
+        }
+
+    if clear:
+        yield {
+            'name': 'docker-clear',
+            'actions': [
+                'echo - Removing Unused Docker Volumes:',
+                'docker volume prune -f',
+                'echo - Removing Unused Docker Containers:',
+                'docker container prune -f',
+                'echo - Removing Unused Docker Images:',
+                'docker container prune -f'
+            ],
+            'verbosity': 2
+        }
+
+
+def task_publish():
+    """push to keroku"""
+    return {
+        'actions': ['git push heroku main']
     }
