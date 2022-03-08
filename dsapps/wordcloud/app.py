@@ -2,6 +2,7 @@ import tldextract as tld
 import string
 import random
 import starlette.status as status
+import os
 import os.path as path
 
 from pathlib import Path
@@ -22,6 +23,9 @@ class Text(BaseModel):
 BASE_DIR = Path(__file__).resolve().parent
 templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates')))
 static = Path(BASE_DIR, 'images').relative_to(path.abspath(path.curdir))
+
+if not static.exists():
+    os.mkdir(static)
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=str(static)), name="static")
