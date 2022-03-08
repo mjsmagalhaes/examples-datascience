@@ -1,5 +1,9 @@
 dslib/
-dsxamples/
+dsexamples/
+notebooks/
 tests/
+wow/
+assets/
 
-*.ipynb
+dodo.py
+install.ps1
