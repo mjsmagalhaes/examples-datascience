@@ -1,7 +1,5 @@
-data/
+dslib/
+dsxamples/
 tests/
-ibm/
-forest_fires/
-restaurant_reviews/
 
 *.ipynb

@@ -1,1 +1,1 @@
-web: uvicorn dslib.web:app --host=0.0.0.0 --port=${PORT:-5000}
+web: uvicorn dsapps:app --host=0.0.0.0 --port=${PORT:-5000}

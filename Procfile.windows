@@ -1,1 +1,1 @@
-web: uvicorn --reload dslib.web:app
+web: uvicorn --reload dsapps:app
