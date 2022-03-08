@@ -1,6 +1,4 @@
-import doit
 import glob
-import sys
 import os.path as path
 from pathlib import Path
 from ruamel.yaml import YAML
