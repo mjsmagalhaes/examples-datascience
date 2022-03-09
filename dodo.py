@@ -58,7 +58,7 @@ def task_export():
 def task_test():
     "run pytest"
     return {
-        'actions': ['python -m pytest --html=report.html tests/'],
+        'actions': ['python -m pytest --html=tests/report.html tests/'],
         'verbosity': 2,
     }
 

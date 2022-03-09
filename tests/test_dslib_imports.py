@@ -7,19 +7,19 @@ import deal
 from hypothesis.strategies import sampled_from
 
 
-def list_files(dir='data', ext='.csv'):
-  path = os.walk(dir)
-  file_list = []
-  for root, directories, files in path:
-    # for directory in directories:
-    #     print(directory)
+def list_files(dir='dsexamples', ext='.csv'):
+    path = os.walk(dir)
+    file_list = []
+    for root, directories, files in path:
+        # for directory in directories:
+        #     print(directory)
 
-    for file in files:
-      _, fileExt = os.path.splitext(file)
-      if fileExt == ext:
-        file_list.append(os.path.join(root, file))
+        for file in files:
+            _, fileExt = os.path.splitext(file)
+            if fileExt == ext:
+                file_list.append(os.path.join(root, file))
 
-  return file_list
+    return file_list
 
 
 existing_file = sampled_from(list_files())

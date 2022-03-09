@@ -1,8 +1,0 @@
-tests/test_dslib_imports.py::test_div:
-
-  - during generate phase (0.42 seconds):
-    - Typical runtimes: ~ 423ms, ~ 0% in data generation
-    - 0 passing examples, 1 failing examples, 0 invalid examples
-    - Found 1 distinct error in this phase
-
-  - Stopped because nothing left to do
