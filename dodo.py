@@ -106,3 +106,4 @@ def task_local():
 
 # 'heroku stack:set container'
 # 'npx parcel serve --public-url /wordcloud/assets'
+# 'python -m build'

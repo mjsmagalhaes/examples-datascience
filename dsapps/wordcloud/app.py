@@ -21,9 +21,17 @@ class Text(BaseModel):
 
 
 BASE_DIR = Path(__file__).resolve().parent
-templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates/dist')))
+
 assets = Path(
-    BASE_DIR, 'templates/dist').relative_to(path.abspath(path.curdir))
+    BASE_DIR,
+    'templates/dist'
+).relative_to(path.abspath(path.curdir))
+
+if not assets.exists():
+    os.mkdir(assets)
+
+templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates/dist')))
+
 static = Path(BASE_DIR, 'images').relative_to(path.abspath(path.curdir))
 
 if not static.exists():
@@ -48,13 +56,15 @@ async def generate_image(request: Request, data: Text):
     wc.to_file(Path(static, filename+'.jpg').as_posix())
 
     return {
-        'filename': "/wordcloud/static/"+filename+'.jpg'
+        'filename': '/wordcloud/'+filename,
+        'path': "/wordcloud/static/"+filename+'.jpg'
     }
 
 
 @app.get("/{filename}")
 async def root(request: Request, filename):
-    return templates.TemplateResponse("response.j2", {
+    return templates.TemplateResponse("main.html", {
         'request': request,
-        'filename': "/wordcloud/static/"+filename+'.jpg'
+        'filename': '/wordcloud/'+filename,
+        'path': "/wordcloud/static/"+filename+'.jpg'
     })

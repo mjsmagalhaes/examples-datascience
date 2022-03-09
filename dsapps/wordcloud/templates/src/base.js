@@ -20,10 +20,15 @@ function handleSubmit(event) {
         .then((response) => {
             console.log(response, window.location.host);
             let imgObjectURL = new URL(
+                response.path,
+                "http://" + window.location.host
+            );
+            let permalinkURL = new URL(
                 response.filename,
                 "http://" + window.location.host
             );
             document.getElementById("image").src = imgObjectURL;
+            document.getElementById("permalink").href = permalinkURL;
         });
 }
 

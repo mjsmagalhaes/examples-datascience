@@ -68,9 +68,8 @@
     </nav>
 
     {% block body %}
-    <p>Teste</p>
     <form
-      class="d-flex row px-3 justify-center"
+      class="d-flex row px-3 mt-2"
       action="/wordcloud"
       method="post"
       id="wordcloud"
@@ -99,8 +98,9 @@
         </button>
       </fieldset>
     </form>
-    <div class="d-flex row w-50 mx-auto">
-      <image class="d-flex" id="image" src="" />
+    <div class="d-flex row justify-content-center w-50 mx-auto">
+      <image class="d-flex" id="image" src="{{path}}" />
+      <a id="permalink" class="d-flex mx-auto" href="{{filename}}">permalink</a>
     </div>
     {% endblock %}
 
