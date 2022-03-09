@@ -4,4 +4,6 @@ fastapi-socketio
 tldextract
 dash
 dash_bootstrap_components
+pandas
+plotly
 wordcloud
