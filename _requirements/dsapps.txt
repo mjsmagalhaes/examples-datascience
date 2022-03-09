@@ -2,5 +2,6 @@ uvicorn
 fastapi[all] 
 fastapi-socketio
 tldextract
+dash
 dash_bootstrap_components
 wordcloud
