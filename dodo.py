@@ -35,7 +35,7 @@ def print_task(task):
 
 def task_export():
     """export notebooks to html"""
-    notebook_list = glob.glob('notebooks/*.ipynb')
+    notebook_list = glob.glob('dsexamples/*.ipynb')
 
     for file in notebook_list:
         yield {
@@ -95,3 +95,14 @@ def task_publish():
     return {
         'actions': ['git push heroku main']
     }
+
+
+def task_local():
+    return {
+        'actions': ['heroku local -f .\Procfile.windows'],
+        'verbosity': 2,
+    }
+
+
+# 'heroku stack:set container'
+# 'npx parcel serve --public-url /wordcloud/assets'

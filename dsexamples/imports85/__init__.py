@@ -1,4 +1,4 @@
-from ..helpers import create_path
+from dsexamples import create_path
 
 from dslib import pandas_from_csv
 
