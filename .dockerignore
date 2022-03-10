@@ -1,3 +1,5 @@
 dsexamples/
 tests/
 wow/
+dist/
+node_modules/

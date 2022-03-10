@@ -2,19 +2,17 @@
   "name": "templates",
   "version": "0.0.1",
   "description": "dsapps.wordcloud templates",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "parcel serve ./src/**/*.html --public-url /assets",
+    "build": "parcel build ./src/**/*.html --public-url /assets"
   },
   "author": "",
   "license": "ISC",
   "targets": {
     "default": {
       "context": "browser",
-      "source": [
-        "src/main.html"
-      ],
-      "publicUrl": "/wordcloud/assets"
+      "publicUrl": "/assets"
     }
   },
   "devDependencies": {

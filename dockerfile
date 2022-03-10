@@ -2,9 +2,10 @@ FROM node:16-slim as frontend
 
 COPY dsapps app/dsapps
 
-WORKDIR /app/dsapps/wordcloud/templates
+WORKDIR /app/dsapps/_templates
+RUN npm install -g npm
 RUN npm install
-RUN npx parcel build --public-url /wordcloud/assets
+RUN npm run build
 RUN rm -rf node_modules
 CMD ["bash"]
 

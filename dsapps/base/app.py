@@ -1,18 +1,30 @@
+import os
+import os.path as path
+
 import tldextract as tld
+
 from pathlib import Path
 from fastapi import FastAPI, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 
-BASE_DIR = Path(__file__).resolve().parent
-templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates')))
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+assets = Path(BASE_DIR, '_templates/dist')
+
+if not assets.exists():
+    os.mkdir(assets)
+
+templates = Jinja2Templates(directory=str(assets))
 
 app = FastAPI()
+app.mount("/assets", StaticFiles(directory=str(assets)), name="assets")
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("main.j2", {'request': request})
+    return templates.TemplateResponse("base/main.html", {'request': request})
 
 
 @app.post("/upload/log")

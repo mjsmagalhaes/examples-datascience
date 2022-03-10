@@ -2,7 +2,6 @@ import dash_bootstrap_components as dbc
 import plotly.express as px
 
 from dash import html, dcc, Input, Output, Dash
-from dslib.plots import plot
 
 prefix = '/dash/example/'
 
@@ -51,8 +50,8 @@ def update_output(value):
     Input('demo-dropdown', 'value')
 )
 def update_output(value):
-    return plot().histogram(data, value).to_html()
-    # return f'You have selected {value}'
+    # return plot().histogram(data, value).to_html()
+    return f'You have selected {value}'
 
 # def shutdown():
 #   func = request.environ.get('werkzeug.server.shutdown')

@@ -1,4 +1,2 @@
 wheel
--r _requirements/dslib.txt
 -r _requirements/dsapps.txt
--r _requirements/dev.txt

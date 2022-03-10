@@ -14,25 +14,17 @@ from wordcloud import WordCloud
 from tempfile import mkstemp
 
 from pydantic import BaseModel
+from ..base import BASE_DIR, templates, assets
 
 
 class Text(BaseModel):
     text: str
 
 
-BASE_DIR = Path(__file__).resolve().parent
+templates = Jinja2Templates(directory=str(assets))
 
-assets = Path(
-    BASE_DIR,
-    'templates/dist'
-).relative_to(path.abspath(path.curdir))
-
-if not assets.exists():
-    os.mkdir(assets)
-
-templates = Jinja2Templates(directory=str(Path(BASE_DIR, 'templates/dist')))
-
-static = Path(BASE_DIR, 'images').relative_to(path.abspath(path.curdir))
+static = Path(BASE_DIR, '_images')
+# static = Path(BASE_DIR, '_images').relative_to(path.abspath(path.curdir))
 
 if not static.exists():
     os.mkdir(static)
@@ -41,12 +33,11 @@ prefix = '/wordcloud'
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=str(static)), name="static")
-app.mount("/assets", StaticFiles(directory=str(assets)), name="assets")
 
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("main.html", {'request': request})
+    return templates.TemplateResponse("wordcloud/main.html", {'request': request})
 
 
 @app.post("/")
@@ -65,7 +56,7 @@ async def generate_image(request: Request, data: Text):
 
 @app.get("/{filename}")
 async def root(request: Request, filename):
-    return templates.TemplateResponse("main.html", {
+    return templates.TemplateResponse("wordcloud/main.html", {
         'request': request,
         'filename': '/wordcloud/'+filename,
         'path': "/wordcloud/static/"+filename+'.jpg'
