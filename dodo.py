@@ -71,7 +71,7 @@ def task_docker(build, clear):
     if build:
         yield {
             'name': 'docker-build',
-            'actions': ['echo docker build --tag dslib .'],
+            'actions': ['docker build --tag dslib .'],
             'verbosity': 2
         }
 
@@ -107,3 +107,11 @@ def task_local():
 # 'heroku stack:set container'
 # 'npx parcel serve --public-url /wordcloud/assets'
 # 'python -m build'
+
+'docker run -it --name backend dslib:backend'
+'docker commit backend dslib:backend'
+
+'docker run -it --name frontend dslib:frontend'
+'docker commit frontend dslib:frontend'
+
+'docker build --tag dslib .'
