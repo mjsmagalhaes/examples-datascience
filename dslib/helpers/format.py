@@ -1,3 +1,6 @@
+suffix = ['', 'K', 'M', 'B', 'T', 'P']
+
+
 def human_format(num):
     num = float('{:.3g}'.format(num))
     magnitude = 0

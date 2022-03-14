@@ -4,7 +4,6 @@ from os import path
 from zipfile import ZipFile, ZIP_DEFLATED
 
 # tokens_to_remove = ['/n']
-suffix = ['', 'K', 'M', 'B', 'T', 'P']
 
 
 def replace_csv_header(dataFile, headerFile, csvFile=None, header=None):

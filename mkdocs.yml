@@ -1,0 +1,27 @@
+site_name: My Docs
+theme:
+  name: "material"
+markdown_extensions:
+    - toc:
+        permalink: true
+    - admonition
+    - pymdownx.details
+    - pymdownx.superfences
+plugins:
+    - search
+    - mkdocstrings:
+        default_handler: python
+        handlers:
+            python:
+                selection:
+                    docstring_style: google
+                rendering:
+                    show_source: true
+                    show_signature_annotations: true
+        watch:
+            - dslib  # 
+
+nav:
+  - Home: index.md
+  - dslib:
+     - dslib/imports.md
