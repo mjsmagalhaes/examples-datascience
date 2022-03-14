@@ -3,11 +3,14 @@ import os.path as path
 from pathlib import Path
 from dslib.helpers import replace_csv_header
 
-current = Path(path.abspath(__file__)).parent
 
+def create_path(p, reference=__file__):
+    ref = Path(path.abspath(reference))
 
-def create_path(p):
-    return Path(current, p)
+    return Path(
+        ref.parent if ref.is_file() else ref,
+        p
+    )
 
 
 def create_data_file(data, header):
