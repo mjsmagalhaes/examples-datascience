@@ -39,3 +39,15 @@ def pandas_from_parquet(file: str = None) -> pd.DataFrame:
 
 def pandas_from_feather(file: str = None) -> pd.DataFrame:
     return feather.read_feather(file).to_pandas()
+
+# -- Conversions --
+
+
+def csv_to_parquet(file: str) -> None:
+    t = csv.read_csv(file+'.csv')
+    parquet.write_table(t, file+'.parquet')
+
+
+def csv_to_feather(file: str) -> None:
+    t = csv.read_csv(file+'.csv')
+    feather.write_feather(t, file+'.feather')
