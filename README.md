@@ -9,11 +9,11 @@ Projects here are considered WIP.
 ## Folder Structure:
 
 - dslib
-  - python packages used to analyse the data
-- data
-  - datasets
-- other folders (with dataset names)
-  - they contain scripts used in the analysis of that specific dataset
+  - A collection of functions that have been used in courses and examples.
+- dsexamples
+  - A collection of notebooks with examples, brief analysis of chosen datasets or courses.
+- dsapps
+  - Some Web Apps related to datascience.
 
 ### Notebook Names
 
@@ -24,9 +24,6 @@ Projects here are considered WIP.
 - data\_
 
   - Those notebooks are about datasets (usually in the data folder unless when too big to add to git like WoWs).
-
-- course\_
-  - Notebooks created for courses labs.
 
 # Companies Open Source Sites (Related to Data Science)
 

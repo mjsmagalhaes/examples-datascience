@@ -1,6 +1,6 @@
 site_name: My Docs
 theme:
-  name: "material"
+    name: "material"
 markdown_extensions:
     - toc:
         permalink: true
@@ -22,6 +22,6 @@ plugins:
             - dslib  # 
 
 nav:
-  - Home: index.md
-  - dslib:
-     - dslib/imports.md
+    - Home: index.md
+    - dslib:
+        - dslib/imports.md
