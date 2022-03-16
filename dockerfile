@@ -1,28 +1,33 @@
 FROM node:16-slim as frontend
+WORKDIR /app
+COPY dsapps .
 
-COPY dsapps app/dsapps
-
-WORKDIR /app/dsapps/_templates
+WORKDIR /app/_templates
 RUN npm install -g npm
 RUN npm install
 RUN npm run build
 RUN rm -rf node_modules
 CMD ["bash"]
 
-FROM python:3.9-slim as backend
+FROM python:3.9-slim as requirements
 WORKDIR /app
 
 COPY _requirements _requirements
 COPY requirements.txt requirements.txt
-COPY --from=frontend /app/dsapps dsapps
-COPY dslib dslib
-# COPY dsexamples dsexamples
 
 RUN python -m venv venv
 ENV PATH="/app/venv/bin:$PATH"
 RUN python -m pip install pip --upgrade
 RUN pip install wheel
 RUN pip install -r requirements.txt
+CMD ["bash"]
+
+FROM requirements
+WORKDIR /app
+
+COPY --from=frontend /app dsapps
+COPY dslib dslib
+# COPY dsexamples dsexamples
 
 ENV PORT 5000
 EXPOSE 5000
