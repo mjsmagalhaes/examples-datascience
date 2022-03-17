@@ -17,6 +17,9 @@ build_dsapps_frontend.displayName = 'build:frontend'
 export const build_dslib = task('docker build --tag dslib .')
 build_dslib.displayName = 'build:app'
 
+export const build_templates = task('npm run build')
+build_templates.displayName = 'build:templates'
+
 export const build_docs = task('mkdocs build')
 build_docs.displayName = 'build:docs'
 
