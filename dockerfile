@@ -1,12 +1,11 @@
 FROM node:16-slim as frontend
 WORKDIR /app
-COPY dsapps .
+COPY package.json .
+COPY dsapps dsapps
 
-WORKDIR /app/_templates
 RUN npm install -g npm
 RUN npm install
 RUN npm run build
-RUN rm -rf node_modules
 CMD ["bash"]
 
 FROM python:3.9-slim as requirements
@@ -25,7 +24,7 @@ CMD ["bash"]
 FROM requirements
 WORKDIR /app
 
-COPY --from=frontend /app dsapps
+COPY --from=frontend /app/dsapps dsapps
 COPY dslib dslib
 # COPY dsexamples dsexamples
 
