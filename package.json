@@ -1,0 +1,46 @@
+{
+  "name": "examples-datascience",
+  "version": "0.0.1",
+  "description": "JS utils",
+  "type": "module",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "imports": {
+    "#modules/*": "./node_modules/*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "parcel serve dsapps/_templates/src/**/*.html",
+    "build": "parcel build dsapps/_templates/src/**/*.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjsmagalhaes/examples-datascience.git"
+  },
+  "author": "MJSM",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mjsmagalhaes/examples-datascience/issues"
+  },
+  "homepage": "https://github.com/mjsmagalhaes/examples-datascience#readme",
+  "targets": {
+    "default": {
+      "context": "browser",
+      "publicUrl": "/assets",
+      "distDir": "./dsapps/_templates/dist"
+    }
+  },
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-execa": "^3.0.2",
+    "parcel": "^2.3.2",
+    "@parcel/transformer-sass": "^2.3.2"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.2",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.8.1"
+  }
+}

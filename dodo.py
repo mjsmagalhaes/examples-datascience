@@ -90,28 +90,19 @@ def task_docker(build, clear):
         }
 
 
-def task_publish():
-    """push to keroku"""
-    return {
-        'actions': ['git push heroku main']
-    }
-
-
-def task_local():
-    return {
-        'actions': ['heroku local -f .\Procfile.windows'],
-        'verbosity': 2,
-    }
-
-
 # 'heroku stack:set container'
 # 'npx parcel serve --public-url /wordcloud/assets'
 # 'python -m build'
 
 'docker run -it --name backend dslib:backend'
-'docker commit backend dslib:backend'
-
 'docker run -it --name frontend dslib:frontend'
+
+'docker commit backend dslib:backend'
 'docker commit frontend dslib:frontend'
 
 'docker build --tag dslib .'
+'docker build --tag dslib:frontend --target frontend .'
+'docker build --tag dslib:requirements --target requirements .'
+'wsl --shutdown'
+
+'mkdocs serve'
