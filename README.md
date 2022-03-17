@@ -3,7 +3,7 @@
 My data science adventures.
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mjsmagalhaes/examples-datascience/HEAD?labpath=wow_log.ipynb)
-
+[![Heroku](https://heroku-badge.herokuapp.com/?app=dslib)]
 Projects here are considered WIP.
 
 ## Folder Structure:
