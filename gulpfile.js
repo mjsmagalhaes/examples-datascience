@@ -29,7 +29,7 @@ serve_docs.displayName = 'serve:docs'
 export const serve_templates = task('npm run serve')
 serve_templates.displayName = 'serve:templates'
 
-export const serve_apps = task('heroku local -f .\Procfile.windows')
+export const serve_apps = task('heroku local -f Procfile.windows')
 serve_apps.displayName = 'serve:apps'
 
 export const publish = task('git push heroku main')
