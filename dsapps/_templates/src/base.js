@@ -1,5 +1,3 @@
-import * as bootstrap from 'bootstrap';
-
 function handleSubmit(event) {
     event.preventDefault();
 
@@ -33,4 +31,6 @@ function handleSubmit(event) {
 }
 
 const form = document.querySelector("#wordcloud");
-form.addEventListener("submit", handleSubmit);
+
+if (form)
+    form.addEventListener("submit", handleSubmit);
