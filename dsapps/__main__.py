@@ -1,4 +1,4 @@
 from imp import reload
-import uvicorn
+from .cli import cli
 
-uvicorn.run("dsapps:app", port=8000, reload=True)
+cli()
