@@ -32,4 +32,12 @@ async def root(file: UploadFile = None):
     if not file:
         return {"message": "No upload file sent"}
     else:
+        with file.file as f:
+            print(f.readlines())
+
         return {"filename": file.filename}
+
+
+@app.post("/upload/encounter")
+async def create_encounter(file: UploadFile = None):
+    pass

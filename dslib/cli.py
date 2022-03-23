@@ -42,7 +42,7 @@ def print_list_dir(dir, ext):
 def upload():
     test_url = 'http://127.0.0.1:8000/upload/log'
     test_files = {
-        "file": open("export.ps1", "r"),
+        "file": open("install.ps1", "r"),
     }
 
     test_response = requests.post(test_url, files=test_files)
