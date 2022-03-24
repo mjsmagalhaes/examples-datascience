@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "JS utils",
   "type": "module",
+  "config": {},
   "directories": {
     "doc": "docs",
     "test": "tests"
@@ -12,8 +13,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "parcel serve dsapps/_templates/src/**/*.html",
-    "build": "parcel build dsapps/_templates/src/**/*.html"
+    "parcel:dev:server": "parcel serve dsapps/_templates/src/**/*.html",
+    "parcel:build": "parcel build dsapps/_templates/src/**/*.html",
+    "parcel:watch": "parcel watch dsapps/_templates/src/**/*.html",
+    "electron": "electron gui.cjs",
+    "electron:dev": "electron gui.cjs --dev"
   },
   "repository": {
     "type": "git",
@@ -35,6 +39,7 @@
   "devDependencies": {
     "@parcel/transformer-sass": "^2.3.2",
     "@parcel/transformer-vue": "^2.3.2",
+    "electron": "^17.2.0",
     "gulp": "^4.0.2",
     "gulp-execa": "^3.0.2",
     "parcel": "^2.3.2",
