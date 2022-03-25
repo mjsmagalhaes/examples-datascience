@@ -141,3 +141,5 @@ dmypy.json
 # Credentials
 keys.py
 keys.js
+
+wow/apps/*.json
