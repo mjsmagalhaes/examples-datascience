@@ -18,4 +18,4 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const app = createApp(Example);
-app.component("font-awesome-icon", FontAwesomeIcon).mount("#app");
+app.component("font-awesome-icon", FontAwesomeIcon).mount("#vue");

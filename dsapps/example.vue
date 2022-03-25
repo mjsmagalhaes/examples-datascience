@@ -1,5 +1,5 @@
 <template>
-  <div>Hello {{ name }}!</div>
+  <div>Vue says Hello {{ name }}!</div>
   font-awesome:
   <i class="fa-solid fa-sliders"></i>
   <i class="fa-solid fa-coffee"></i>

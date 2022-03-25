@@ -9,9 +9,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-assets = Path(BASE_DIR, '_templates/dist')
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = ''
+assets = Path(BASE_DIR, '_templates/dsapps')
 
 if not assets.exists():
     os.mkdir(assets)
