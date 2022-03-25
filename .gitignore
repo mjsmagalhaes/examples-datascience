@@ -30,6 +30,8 @@ MANIFEST
 # Node + Parcel
 node_modules/
 .parcel-cache/
+_templates/
+_images/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -138,3 +140,4 @@ dmypy.json
 
 # Credentials
 keys.py
+keys.js
