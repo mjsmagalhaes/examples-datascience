@@ -2,7 +2,7 @@
 
 <head>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
-    <link rel="stylesheet" href="./base.scss" />
+    <link rel="stylesheet" href="./html/base.scss" />
 </head>
 
 <body>
@@ -56,7 +56,7 @@
     <h1>Test Index!!</h1>
     <a href="./base/main.html">Live Index</a><br>
     <a href="./wordcloud/main.html">WordCloud Generatcor</a><br>
-    <a href="./teste.pug">Pug</a><br>
+    <a href="./html/teste.pug">Pug</a><br>
     {% endblock %}
 
     <div id="vue"></div>
@@ -64,8 +64,8 @@
     <nav class="navbar navbar-expand fixed-bottom navbar-dark bg-primary"></nav>
 
     {% block script %}
-    <script type="module" src="./base.js"></script>
-    <script type="module" src="./vue.js"></script>
+    <script type="module" src="./html/base.js"></script>
+    <script type="module" src="./html/vue.js"></script>
     {% endblock %}
 </body>
 
