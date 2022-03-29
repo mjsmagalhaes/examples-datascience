@@ -139,7 +139,7 @@ dmypy.json
 .doit.*
 
 # Credentials
-keys.py
-keys.js
+keys.*
+credentials.*
 
 wow/apps/*.json
