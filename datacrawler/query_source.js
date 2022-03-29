@@ -12,14 +12,14 @@ export class Source {
 
         data.expiration = Date.now() + (data.expires_in * 1000)
 
-        fs.writeFile("credential.json", JSON.stringify(data), 'utf8', (err) => {
+        fs.writeFile("credentials.json", JSON.stringify(data), 'utf8', (err) => {
             if (err) { console.log(err) }
         });
         return data
     }
 
     async loadAuthData() {
-        var data = await load_data('credential.json');
+        var data = await load_data('credentials.json');
 
         if (data === undefined || data.expiration < Date.now()) {
             console.log('Obtaining new token ...')
@@ -35,22 +35,5 @@ export class Source {
         fs.writeFile("output.json", JSON.stringify(response), 'utf8', (err) => console.log(err));
 
         return response;
-    }
-
-    async loadData(file) {
-        if (!fs.existsSync(file)) {
-            return
-        }
-
-        return new Promise((resolve, reject) => {
-            fs.readFile(file, 'utf8', (err, data) => {
-                if (err) {
-                    console.error(err)
-                    return
-                }
-                // console.log(data)
-                resolve(JSON.parse(data))
-            });
-        })
     }
 }

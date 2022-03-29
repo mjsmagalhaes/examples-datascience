@@ -1,7 +1,7 @@
-import { Transformation } from "../query_transformation";
+import jp from 'jsonpath';
+import jsonata from 'jsonata';
+import * as R from 'ramda';
 
-import jp from "jsonpath";
+export const filter = R.curry((query_string, json_data) => jp.query(json_data, query_string));
 
-export class JSONTransformation extends Transformation {
-
-}
+export const transform = R.curry((query_string, json_data) => jsonata(query_string).evaluate(json_data));
