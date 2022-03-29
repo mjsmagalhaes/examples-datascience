@@ -20,6 +20,11 @@ export async function fromFile(file) {
 }
 
 export const toFile = R.curry(async (file, json_data) => {
-    fs.writeFile(file, JSON.stringify(json_data), 'utf8', (err) => console.log(err))
+    fs.writeFile(file, JSON.stringify(json_data), 'utf8', (err) => {
+        if (err) {
+            console.error(err)
+            return
+        }
+    })
     return json_data;
 });

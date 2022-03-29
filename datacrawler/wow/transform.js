@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import lo from 'lodash';
 import * as json from '../json/index.js';
 
@@ -14,7 +15,9 @@ const query = `
 export const extractKillsPerDifficulty = () => json.transform(query)
 
 export const transformToKillsPerBoss = (data) => lo.transform(data, (result, value, key) => {
-    const process = (el) => (result[el.name] || (result[el.name] = [])).push({ [key]: el.kills })
+    result = result || {}
+    // console.log(result, value, key)
+    const process = (el) => lo.update(result, el.name, (el2) => _.assign(el2, { [key]: el.kills }))
     lo.forEach(value, process)
     return result;
 }, {})
