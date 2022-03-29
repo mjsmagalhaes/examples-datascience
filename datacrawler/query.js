@@ -1,13 +1,12 @@
+import { Command } from 'commander';
+import chalk from 'chalk';
+import lo from 'lodash';
+import Table from 'cli-table3';
+
 import * as R from 'ramda';
 
 import * as wow from './wow/transform.js';
 import * as json from './json/index.js';
-
-// --experimental - specifier - resolution=node
-// Source >> Transformation >> Sink
-
-// https://develop.battle.net/documentation/guides/using-oauth/authorization-code-flow
-// https://github.com/diogosouza/oauth2-with-node-js
 
 (async () => {
     var data = await json.fromFile('./datacrawler/output.json');
@@ -19,6 +18,17 @@ import * as json from './json/index.js';
         json.toFile('raids.json')
     )
 
-    console.log(transform(data))
+    var t = new Table({
+        head: [
+            chalk.green('ENCOUNTERS'),
+            chalk.green('KILLS')
+        ]
+    });
+
+    lo.forEach(await transform(data), (el, key) => {
+        t.push([key, JSON.stringify(el)])
+    })
+
+    console.log(t.toString())
 })();
 
