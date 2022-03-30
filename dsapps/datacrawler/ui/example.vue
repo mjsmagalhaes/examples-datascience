@@ -27,8 +27,19 @@
     </div>
 
     <div class="d-flex flex-row mx-2 my-2 gap-1">
-      <textarea v-model="inputText" v-bind="inputArea"></textarea>
-      <textarea v-model="outputText" v-bind="outputArea"></textarea>
+      <textarea
+        v-model="inputText"
+        class="form-control jsonarea"
+        rows="20"
+        placeholder="Type Data Here."
+      ></textarea>
+
+      <textarea
+        v-model="outputText"
+        class="form-control jsonarea"
+        rows="20"
+        placeholder="Type Data Here."
+      ></textarea>
     </div>
 
     <div class="d-flex">
@@ -45,37 +56,32 @@
 </style>
 
 <script>
+import { ref } from "vue";
 import { queryRaidData, parseData, dataToTable } from "../query.js";
 
 export default {
-  data() {
-    return {
-      inputCharacter: "Yapriesty",
-      inputRealm: "Azralon",
-      inputText: "",
-      inputArea: {
-        class: "form-control jsonarea",
-        rows: 20,
-        placeholder: "Type Data Here.",
-      },
-      outputText: "",
-      outputArea: {
-        readonly: true,
-        class: "form-control jsonarea",
-        rows: 20,
-        placeholder: "Nothing Yet.",
-      },
-      name: "Example",
-    };
-  },
-  methods: {
-    async query() {
+  setup() {
+    const inputCharacter = ref("Yapriesty");
+    const inputRealm = ref("Azralon");
+    const inputAreaText = ref("");
+    const outputAreaText = ref("");
+
+    async function query() {
       var data = await queryRaidData(this.inputCharacter, this.inputRealm);
       this.inputText = JSON.stringify(data);
       var parsedData = await parseData(data);
       this.outputText = dataToTable(parsedData).toString();
       // console.log(table);
-    },
+    }
+
+    return {
+      inputCharacter,
+      inputRealm,
+      inputText: inputAreaText,
+      outputText: outputAreaText,
+      name: "Example",
+      query,
+    };
   },
 };
 </script>
