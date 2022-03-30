@@ -9,9 +9,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 
-# BASE_DIR = Path(__file__).resolve().parent.parent
-BASE_DIR = ''
-assets = Path(BASE_DIR, '_templates/dsapps')
+BASE_DIR = Path(__file__).resolve().parent
+# BASE_DIR = ''
+assets = Path(BASE_DIR, 'dist/prod')
 
 if not assets.exists():
     os.mkdir(assets)
@@ -24,7 +24,7 @@ app.mount("/assets", StaticFiles(directory=str(assets)), name="assets")
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("base/main.html", {'request': request})
+    return templates.TemplateResponse("index.html", {'request': request})
 
 
 @app.post("/upload/log")

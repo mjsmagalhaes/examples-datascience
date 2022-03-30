@@ -2,17 +2,55 @@
   "name": "dsapps-templates",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "parcel build --target dsapps index.html",
+    "serve": "parcel serve --target dsapps index.html",
+    "watch": "parcel watch --target prod"
   },
   "author": "",
   "license": "ISC",
-  "source": ["index.html"],
+  "source": [
+    "index.html",
+    "wordcloud/index.html",
+    "datacrawler/index.html"
+  ],
   "targets": {
     "dsapps": {
+      "context": "browser"
+    },
+    "prod": {
       "context": "browser",
-      "publicUrl": "/assets",
-      "distDir": "../_templates/dsapps"
+      "publicUrl": "/assets"
     }
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.1.1",
+    "@fortawesome/free-regular-svg-icons": "^6.1.1",
+    "@fortawesome/free-solid-svg-icons": "^6.1.1",
+    "@fortawesome/vue-fontawesome": "^3.0.0-5",
+    "@popperjs/core": "^2.11.2",
+    "bootstrap": "^5.1.3",
+    "chalk": "^5.0.1",
+    "cherio": "^1.0.0-rc.2",
+    "cli-table3": "^0.6.1",
+    "commander": "^9.1.0",
+    "fast-csv": "^4.3.6",
+    "got": "^12.0.2",
+    "jsonata": "^1.8.6",
+    "jsonpath": "^1.1.1",
+    "lodash": "^4.17.21",
+    "ramda": "^0.28.0",
+    "vue": "^3.2.31"
+  },
+  "devDependencies": {
+    "@parcel/transformer-pug": "^2.3.2",
+    "@parcel/transformer-sass": "^2.4.0",
+    "@parcel/transformer-vue": "^2.4.0",
+    "os-browserify": "^0.3.0",
+    "parcel": "^2.4.0",
+    "process": "^0.11.10",
+    "util": "^0.12.4"
   }
 }

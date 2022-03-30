@@ -29,7 +29,7 @@ static = Path(BASE_DIR, '_images')
 if not static.exists():
     os.mkdir(static)
 
-prefix = '/wordcloud'
+prefix = '/datacrawler'
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=str(static)), name="static")
@@ -37,27 +37,5 @@ app.mount("/static", StaticFiles(directory=str(static)), name="static")
 
 @app.get("/", response_class=HTMLResponse)
 async def root(request: Request):
-    return templates.TemplateResponse("wordcloud/index.html", {'request': request})
+    return templates.TemplateResponse("datacrawler/index.html", {'request': request})
 
-
-@app.post("/")
-async def generate_image(request: Request, data: Text):
-    wc = WordCloud().generate(data.text)
-    filename = 'tmp_' + \
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=15))
-
-    wc.to_file(Path(static, filename+'.jpg').as_posix())
-
-    return {
-        'filename': '/wordcloud/'+filename,
-        'path': "/wordcloud/static/"+filename+'.jpg'
-    }
-
-
-@app.get("/{filename}")
-async def root(request: Request, filename):
-    return templates.TemplateResponse("wordcloud/index.html", {
-        'request': request,
-        'filename': '/wordcloud/'+filename,
-        'path': "/wordcloud/static/"+filename+'.jpg'
-    })
