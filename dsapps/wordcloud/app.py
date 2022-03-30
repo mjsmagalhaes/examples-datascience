@@ -29,8 +29,6 @@ static = Path(BASE_DIR, '_images')
 if not static.exists():
     os.mkdir(static)
 
-prefix = '/wordcloud'
-
 app = FastAPI()
 app.mount("/static", StaticFiles(directory=str(static)), name="static")
 
