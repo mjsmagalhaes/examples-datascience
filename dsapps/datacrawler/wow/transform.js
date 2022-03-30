@@ -2,7 +2,7 @@ import _ from 'lodash';
 import lo from 'lodash';
 import * as json from '../json/index.js';
 
-export const filterInstanceId = (id) => json.transform(`expansions[7].instances[instance.id = ${id}]`)
+export const filterInstanceId = (id, expansionId = 7) => json.transform(`expansions[${expansionId}].instances[instance.id = ${id}]`)
 
 const query = `
     modes{

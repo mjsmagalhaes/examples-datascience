@@ -45,7 +45,7 @@
 </style>
 
 <script>
-import { parseData, dataToTable } from "../query.js";
+import { queryRaidData, parseData, dataToTable } from "../query.js";
 
 export default {
   data() {
@@ -70,8 +70,10 @@ export default {
   },
   methods: {
     async query() {
-      var data = await parseData(JSON.parse(this.inputText));
-      this.outputText = dataToTable(data).toString();
+      var data = await queryRaidData(this.inputCharacter, this.inputRealm);
+      this.inputText = JSON.stringify(data);
+      var parsedData = await parseData(data);
+      this.outputText = dataToTable(parsedData).toString();
       // console.log(table);
     },
   },
