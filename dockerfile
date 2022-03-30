@@ -2,10 +2,10 @@ FROM node:16-slim as frontend
 WORKDIR /app
 RUN npm install -g npm
 
-COPY package.json .
+COPY dsapps/package.json .
 RUN npm install
 
-COPY dsapps dsapps
+COPY dsapps .
 RUN npm run build
 
 CMD ["bash"]
@@ -30,8 +30,10 @@ WORKDIR /app
 ENV PORT 5000
 EXPOSE 5000
 
-COPY --from=frontend /app/dsapps dsapps
-COPY dslib dslib
+COPY dsapps dsapps
+COPY --from=frontend /app/dist dsapps/dist
+
+# COPY dslib dslib
 # COPY dsexamples dsexamples
 
 CMD uvicorn dsapps:app --host=0.0.0.0 --port=${PORT}

@@ -1,5 +1,6 @@
 dsexamples/
 tests/
 wow/
-dist/
-node_modules/
+dsapps/.parcel-cache/
+dsapps/dist/
+dsapps/node_modules/
