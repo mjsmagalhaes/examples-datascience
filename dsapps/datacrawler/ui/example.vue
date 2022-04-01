@@ -52,9 +52,9 @@ export default {
     async function query() {
       var data = await queryRaidData(this.inputCharacter, this.inputRealm);
       this.inputText = JSON.stringify(data);
+
       var parsedData = await parseData(data);
       this.outputText = dataToTable(parsedData).toString();
-      // console.log(table);
     }
 
     return {
@@ -62,7 +62,6 @@ export default {
       inputRealm,
       inputText: inputAreaText,
       outputText: outputAreaText,
-      name: "Example",
       query,
     };
   },
