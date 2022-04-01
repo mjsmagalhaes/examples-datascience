@@ -1,13 +1,12 @@
-doctype html
+extends ../index.pug
 
-p {% extends "index.html" %}
+block css 
+  link(rel="stylesheet" href="./base.scss")
 
-html(lang="en")
-  head
-    link(rel="stylesheet", href="./base.scss")
-  body
-    h1 Hello Pug!
-    p.
-      Pug is a terse and simple templating language with a
-      strong focus on performance and powerful features.
-    //- script(type="module", src="base.js")
+block body
+  h1 Hello Pug!
+  p.
+    Pug is a terse and simple templating language with a
+    strong focus on performance and powerful features.
+
+block script

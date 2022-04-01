@@ -1,0 +1,81 @@
+html
+
+head
+    meta(http-equiv="Content-Security-Policy" content="script-src 'self'")
+
+    block css
+        link(rel="stylesheet" href="./_base/base.scss")
+
+body
+    nav.navbar.navbar-expand-md.navbar-dark.bg-primary
+        .container-fluid
+            a.navbar-brand(href="/") DSApps
+
+            button.navbar-toggler(
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" 
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            )
+                span.navbar-toggler-icon
+            
+            #navbarSupportedContent.collapse.navbar-collapse
+                ul.navbar-nav.me-auto.mb-2.mb-lg-0
+                    li.nav-item
+                        a.nav-link(href="/wordcloud") Wordcloud
+
+                    li.nav-item.active
+                        a.nav-link(href="/datacrawler") DataCrawler
+
+                    //- li.nav-item.dropdown
+                    //-     a#navbarDropdown.nav-link.dropdown-toggle(
+                    //-         href="#"
+                    //-         role="button"
+                    //-         data-bs-toggle="dropdown" 
+                    //-         aria-expanded="false"
+                    //-     ) Dropdown
+
+                    //-     ul.dropdown-menu(aria-labelledby="navbarDropdown")
+                    //-         li
+                    //-             a.dropdown-item(href="#") Action
+                    //-         li
+                    //-             a.dropdown-item(href="#") Another action
+                    //-         li
+                    //-             hr.dropdown-divider/
+                    //-         li
+                    //-             a.dropdown-item(href="#") Something else here
+
+                    //- li.nav-item
+                    //-     a.nav-link.disabled Disabled
+                
+                //- form.d-flex
+                //-     input.form-control.me-2(type="search" placeholder="Search" aria-label="Search")
+                //-     button.btn.btn-outline-success(type="submit") Search
+                    
+
+    <div class="m-3">
+        block body
+            h1.text-center Welcome to DS Apps!
+
+            p.text-center.mt-4 Here you find a list of the current apps:
+
+            .d-flex.flex-column.col-6.m-auto.align-items-center.gap-2.mt-4
+                a(href="./wordcloud") WordCloud Generator
+                a(href="./datacrawler") WoW Api Crawler
+                a(href="./_base/teste.pug") Pug
+
+                #vue.mt-4
+            </div>
+    </div>
+
+    <nav class="navbar navbar-expand fixed-bottom navbar-dark bg-primary justify-content-center">
+        since 2022
+    </nav>
+
+    block script
+        script(type="module" src="./_base/vue.js")
+</body>
+
+</html>

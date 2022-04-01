@@ -1,0 +1,29 @@
+extends ../index.pug
+
+block css 
+    link(rel="stylesheet" href="../_base/base.scss")
+
+block body
+    form#wordcloud.d-flex.row.px-3.mt-2(action="/wordcloud" method="post" target="_top")
+        fieldset.justfy-center
+            textarea#exampleFormControlTextarea1.form-control(
+                name="text" 
+                rows="3"
+            )/
+
+            //- input.form-control.me-2(
+            //-     name="text"
+            //-     placeholder="Search"
+            //-     aria-label="Search"
+            //- )
+            
+            button.btn.btn-outline-success.d-flex.mx-auto.mt-4(type="submit") Search
+           
+    
+    .d-flex.row.justify-content-center.w-50.mx-auto
+        image#image.d-flex(src="{{path}}")
+        a#permalink.d-flex.mx-auto(href="{{filename}}") permalink
+
+
+block script
+    script(type="module" src="./base.js")

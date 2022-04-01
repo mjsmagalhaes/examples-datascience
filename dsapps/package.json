@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "source": [
-    "index.html",
-    "wordcloud/index.html",
-    "datacrawler/index.html"
+    "index.pug",
+    "wordcloud/index.pug",
+    "datacrawler/index.pug"
   ],
   "targets": {
     "dsapps": {
