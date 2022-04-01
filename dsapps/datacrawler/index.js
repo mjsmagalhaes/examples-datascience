@@ -15,20 +15,28 @@ program
     .description('Get raid info for a character')
     .arguments('<character>')
     .option('-r, --realm <name>', 'character realm', 'azralon')
+    .option('--debug', 'output debug files')
     .action(async (character, options, command) => {
         // Source
         var auth = await loadAuthData();
         BNET.params.access_token = auth.access_token;
-        console.log(options)
+        // console.log(options)
 
         var data = await queryRaidData(character, options.realm, BNET);
 
+        if (options.debug)
+            json.toFile('datacrawler/output.json', data);
+
+        // Alternate Source for Debugging.
+        // var data = json.fromFile('datacrawler/output.json');
+
         // Transform
         var parsedData = await parseRaidData(data);
-        console.log(transformRaidDataToTable(parsedData).toString())
+        console.log(transformRaidDataToTable(parsedData).toString());
 
         // Sink
-        json.toFile('raids.json', parsedData);
+        if (options.debug)
+            json.toFile('datacrawler/raids.json', parsedData);
     })
 
 
