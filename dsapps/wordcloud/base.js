@@ -34,3 +34,5 @@ const form = document.querySelector("#wordcloud");
 
 if (form)
     form.addEventListener("submit", handleSubmit);
+
+

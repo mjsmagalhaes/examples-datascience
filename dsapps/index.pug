@@ -1,13 +1,36 @@
+mixin headerLink(name, link)
+    li.nav-item&attributes(attributes)
+        a.nav-link(href=link)= name
+
+mixin headerDropbox()
+    li.nav-item.dropdown
+        a#navbarDropdown.nav-link.dropdown-toggle(
+            href="#"
+            role="button"
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+        ) Dropdown
+
+        ul.dropdown-menu(aria-labelledby="navbarDropdown")
+            li
+                a.dropdown-item(href="#") Action
+            li
+                a.dropdown-item(href="#") Another action
+            li
+                hr.dropdown-divider/
+            li
+                a.dropdown-item(href="#") Something else here
+
 html
 
 head
     meta(http-equiv="Content-Security-Policy" content="script-src 'self'")
 
     block css
-        link(rel="stylesheet" href="./_base/base.scss")
+        link(rel="stylesheet" href="/dsapps/_base/base.scss")
 
 body
-    nav.navbar.navbar-expand-md.navbar-dark.bg-primary
+    nav.navbar.navbar-expand-md.navbar-dark.bg-info
         .container-fluid
             a.navbar-brand(href="/") DSApps
 
@@ -22,33 +45,9 @@ body
                 span.navbar-toggler-icon
             
             #navbarSupportedContent.collapse.navbar-collapse
-                ul.navbar-nav.me-auto.mb-2.mb-lg-0
-                    li.nav-item
-                        a.nav-link(href="/wordcloud") Wordcloud
-
-                    li.nav-item.active
-                        a.nav-link(href="/datacrawler") DataCrawler
-
-                    //- li.nav-item.dropdown
-                    //-     a#navbarDropdown.nav-link.dropdown-toggle(
-                    //-         href="#"
-                    //-         role="button"
-                    //-         data-bs-toggle="dropdown" 
-                    //-         aria-expanded="false"
-                    //-     ) Dropdown
-
-                    //-     ul.dropdown-menu(aria-labelledby="navbarDropdown")
-                    //-         li
-                    //-             a.dropdown-item(href="#") Action
-                    //-         li
-                    //-             a.dropdown-item(href="#") Another action
-                    //-         li
-                    //-             hr.dropdown-divider/
-                    //-         li
-                    //-             a.dropdown-item(href="#") Something else here
-
-                    //- li.nav-item
-                    //-     a.nav-link.disabled Disabled
+                ul#navBarLinks.navbar-nav.me-auto.mb-2.mb-lg-0
+                    +headerLink("WordCloud", "/wordcloud/")
+                    +headerLink("DataCrawler", "/datacrawler/")
                 
                 //- form.d-flex
                 //-     input.form-control.me-2(type="search" placeholder="Search" aria-label="Search")
@@ -70,12 +69,13 @@ body
             </div>
     </div>
 
-    <nav class="navbar navbar-expand fixed-bottom navbar-dark bg-primary justify-content-center">
-        since 2022
-    </nav>
+    nav.navbar.fixed-bottom.navbar-dark.bg-info.justify-content-center
+        | since 2022
+
+    script(type="module" src="/dsapps/_base/header.js")
 
     block script
-        script(type="module" src="./_base/vue.js")
+        script(type="module" src="/dsapps/_base/vue.js")
 </body>
 
 </html>

@@ -1,8 +1,5 @@
 extends ../index.pug
 
-block css 
-    link(rel="stylesheet" href="../_base/base.scss")
-
 block body
     form#wordcloud.d-flex.row.px-3.mt-2(action="/wordcloud" method="post" target="_top")
         fieldset.justfy-center
