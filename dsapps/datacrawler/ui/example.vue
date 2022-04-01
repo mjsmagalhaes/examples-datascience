@@ -1,51 +1,34 @@
-<template>
-  <div>
-    <div>Vue says Hello {{ name }}!!!</div>
+<template lang="pug">
+div 
+  .mb-3.row
+    .d-flex.flex-column.col-6
+      label.col-sm-2.col-form-label.m-auto Character
 
-    <span>
-      font-awesome: <i class="fa-solid fa-sliders"></i>
-      <i class="fa-solid fa-coffee"></i
-    ></span>
+      .col-sm-11.m-auto
+        input.col-12(v-model="inputCharacter")/
 
-    <div class="mb-3 row">
-      <div class="d-flex flex-column col-6">
-        <label for="inputPassword" class="col-2 col-form-label m-auto">
-          Character
-        </label>
-        <div class="col-sm-11 m-auto">
-          <input class="col-12" v-model="inputCharacter" />
-        </div>
-      </div>
-      <div class="d-flex flex-column col-6">
-        <label for="inputPassword" class="col-sm-2 col-form-label m-auto"
-          >Realm</label
-        >
-        <div class="col-sm-11 m-auto">
-          <input class="col-12" v-model="inputRealm" />
-        </div>
-      </div>
-    </div>
+    .d-flex.flex-column.col-6
+      label.col-sm-2.col-form-label.m-auto Realm
 
-    <div class="d-flex flex-row mx-2 my-2 gap-1">
-      <textarea
-        v-model="inputText"
-        class="form-control jsonarea"
-        rows="20"
-        placeholder="Type Data Here."
-      ></textarea>
+      .col-sm-11.m-auto
+        input.col-12(v-model="inputRealm")/
 
-      <textarea
-        v-model="outputText"
-        class="form-control jsonarea"
-        rows="20"
-        placeholder="Type Data Here."
-      ></textarea>
-    </div>
+  .d-flex.flex-row.mx-2.my-2.gap-1
+    textarea.form-control.jsonarea(
+      readonly,
+      v-model="inputText",
+      rows="20",
+      placeholder="Raw Data will show here."
+    )/
 
-    <div class="d-flex">
-      <button class="btn btn-secondary m-auto" @click="query()">Submit</button>
-    </div>
-  </div>
+    textarea.form-control.jsonarea(
+      readonly,
+      v-model="outputText",
+      rows="20",
+      placeholder="Type Data Here."
+    )/
+  .d-flex
+    button.btn.btn-secondary.m-auto(@click="query()") Submit
 </template>
 
 <style>
