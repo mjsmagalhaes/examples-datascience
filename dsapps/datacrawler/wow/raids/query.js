@@ -24,7 +24,7 @@ export async function queryRaidData(character, realm, profile = DSAPPS) {
     var _character = character.trim().toLowerCase();
     var url = `${profile.url}/${_realm}/${_character}/encounters/raids`
 
-    console.log(profile)
+    // console.log(profile)
     var r = await axios.get(url, { params: profile.params });
 
     return r.data

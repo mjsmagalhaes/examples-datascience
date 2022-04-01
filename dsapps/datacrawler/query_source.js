@@ -10,6 +10,8 @@ export async function loadAuthData() {
     if (data === undefined || (data.expiration * 1000) < Date.now()) {
         console.log('Obtaining new token ...')
         data = await getAuthToken()
+    } else {
+        console.log('Authentication Data Found.')
     }
 
     return data

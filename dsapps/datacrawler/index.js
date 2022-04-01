@@ -1,25 +1,35 @@
-// import { Command } from 'commander';
+import { Command } from 'commander';
 // import chalk from 'chalk';
 
-// import { parseRaidData, transformRaidDataToTable } from "./wow/raids/query.js";
+import { parseRaidData, transformRaidDataToTable } from "./wow/raids/query.js";
 import * as json from './json/index.js';
 
 import { BNET, queryRaidData } from './wow/raids/query.js';
 import { loadAuthData } from './query_source.js';
 
-(async () => {
-    // Source
-    // var data = await json.fromFile('./datacrawler/output.json');
-    var auth = await loadAuthData();
+const program = new Command();
+program.version('0.0.1');
 
-    BNET.params.access_token = auth.access_token;
-    var data = await queryRaidData('yapriesty', 'azralon', BNET);
+program
+    .command('raid')
+    .description('Get raid info for a character')
+    .arguments('<character>')
+    .option('-r, --realm <name>', 'character realm', 'azralon')
+    .action(async (character, options, command) => {
+        // Source
+        var auth = await loadAuthData();
+        BNET.params.access_token = auth.access_token;
+        console.log(options)
 
-    //     // Transform
-    //     var parsedData = await parseRaidData(data);
-    //     console.log(transformRaidDataToTable(parsedData).toString())
+        var data = await queryRaidData(character, options.realm, BNET);
 
-    //     // Sink
-    // json.toFile('raids.json', parsedData);
-    json.toFile('./raids.json', data);
-})();
+        // Transform
+        var parsedData = await parseRaidData(data);
+        console.log(transformRaidDataToTable(parsedData).toString())
+
+        // Sink
+        json.toFile('raids.json', parsedData);
+    })
+
+
+program.parse();
