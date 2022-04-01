@@ -2,9 +2,9 @@ import _ from 'lodash';
 import lo from 'lodash';
 import * as json from '../json/index.js';
 
-export const filterInstanceId = (instanceId, expansionIdx = 7) => {
+export const filterInstanceId = (instanceId, expansionId = 499) => {
     return json.transform(
-        `expansions[${expansionIdx}].instances[instance.id = ${instanceId}]`
+        `expansions[expansion.id = ${expansionId}].instances[instance.id = ${instanceId}]`
     )
 }
 

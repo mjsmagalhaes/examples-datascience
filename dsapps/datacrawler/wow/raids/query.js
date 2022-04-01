@@ -32,7 +32,7 @@ export async function queryRaidData(character, realm, profile = DSAPPS) {
 
 export async function parseRaidData(data) {
     const transform = R.pipe(
-        wow.filterInstanceId(1195, 7),
+        wow.filterInstanceId(1195),
         wow.extractKillsPerDifficulty(),
         wow.transformToKillsPerBoss
     )
