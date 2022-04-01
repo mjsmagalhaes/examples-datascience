@@ -1,13 +1,10 @@
-<html>
+{% extends "index.html" %}
 
-<head>
-    <link rel="stylesheet" href="ui/base.scss" />
-</head>
+{% block body %}
+<!-- <a href="./data/raids">Home</a> -->
+<div id="vue"></div>
+{% endblock %}
 
-<body>
-    <a href="/">Home</a> - <a href="./data/raids">Home</a> -
-    <div id="vue"></div>
-    <script type="module" src="ui/vue.js"></script>
-</body>
-
-</html>
+{% block script %}
+<script type="module" src="ui/vue.js"></script>
+{% endblock %}

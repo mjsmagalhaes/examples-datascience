@@ -1,5 +1,7 @@
 doctype html
 
+p {% extends "index.html" %}
+
 html(lang="en")
   head
     link(rel="stylesheet", href="./base.scss")
@@ -8,4 +10,4 @@ html(lang="en")
     p.
       Pug is a terse and simple templating language with a
       strong focus on performance and powerful features.
-    script(type="module", src="base.js")
+    //- script(type="module", src="base.js")
