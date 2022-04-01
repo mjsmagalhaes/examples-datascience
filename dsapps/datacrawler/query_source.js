@@ -1,39 +1,27 @@
 import fs from 'fs';
 import got from 'got';
 
+import * as json from './json/index.js'
+import { credentials } from './keys.js'
 
-// JSONSource / HTMLSource / GraphQLSource ?
-export class Source {
-    async getAuthToken() {
-        const data = await got.got(`https://us.battle.net/oauth/token`, {
-            method: 'POST',
-            form: { client_id, client_secret, grant_type: 'client_credentials' }
-        }).json()
+export async function loadAuthData() {
+    var data = await json.fromFile('datacrawler/credentials.json');
 
-        data.expiration = Date.now() + (data.expires_in * 1000)
-
-        fs.writeFile("credentials.json", JSON.stringify(data), 'utf8', (err) => {
-            if (err) { console.log(err) }
-        });
-        return data
+    if (data === undefined || (data.expiration * 1000) < Date.now()) {
+        console.log('Obtaining new token ...')
+        data = await getAuthToken()
     }
 
-    async loadAuthData() {
-        var data = await load_data('credentials.json');
+    return data
+}
 
-        if (data === undefined || data.expiration < Date.now()) {
-            console.log('Obtaining new token ...')
-            data = await getAuthToken()
-        }
+async function getAuthToken() {
+    const data = await got.post(`https://us.battle.net/oauth/token`, {
+        form: credentials
+    }).json()
 
-        return data
-    }
+    data.expiration = (Date.now() + (data.expires_in * 1000)) / 1000;
 
-    async getData(url) {
-        const response = await got.got(url).json();
-
-        fs.writeFile("output.json", JSON.stringify(response), 'utf8', (err) => console.log(err));
-
-        return response;
-    }
+    json.toFile("datacrawler/credentials.json", JSON.stringify(data))
+    return data
 }

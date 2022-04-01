@@ -40,7 +40,11 @@ div
 
 <script>
 import { ref } from "vue";
-import { queryRaidData, parseData, dataToTable } from "../query.js";
+import {
+  queryRaidData,
+  parseRaidData,
+  transformRaidDataToTable,
+} from "../wow/raids/query.js";
 
 export default {
   setup() {
@@ -51,10 +55,10 @@ export default {
 
     async function query() {
       var data = await queryRaidData(this.inputCharacter, this.inputRealm);
-      this.inputText = JSON.stringify(data);
+      var parsedData = await parseRaidData(data);
 
-      var parsedData = await parseData(data);
-      this.outputText = dataToTable(parsedData).toString();
+      this.inputText = JSON.stringify(data);
+      this.outputText = transformRaidDataToTable(parsedData).toString();
     }
 
     return {

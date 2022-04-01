@@ -2,7 +2,11 @@ import _ from 'lodash';
 import lo from 'lodash';
 import * as json from '../json/index.js';
 
-export const filterInstanceId = (id, expansionId = 7) => json.transform(`expansions[${expansionId}].instances[instance.id = ${id}]`)
+export const filterInstanceId = (instanceId, expansionIdx = 7) => {
+    return json.transform(
+        `expansions[${expansionIdx}].instances[instance.id = ${instanceId}]`
+    )
+}
 
 const query = `
     modes{
@@ -16,7 +20,6 @@ export const extractKillsPerDifficulty = () => json.transform(query)
 
 export const transformToKillsPerBoss = (data) => lo.transform(data, (result, value, key) => {
     result = result || {}
-    // console.log(result, value, key)
     const process = (el) => lo.update(result, el.name, (el2) => _.assign(el2, { [key]: el.kills }))
     lo.forEach(value, process)
     return result;

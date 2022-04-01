@@ -31,7 +31,7 @@ async def raidDataStub(character:str, realm:str):
     
     return data
 
-@app.get("/data/raids")
+@app.get("/data/{realm}/{character}/encounters/raids")
 async def raidData(character:str, realm:str):
     with open(Path(BASE_DIR, 'datacrawler/credentials.json')) as credentials_file:
         data:Dict = json.load(credentials_file)
