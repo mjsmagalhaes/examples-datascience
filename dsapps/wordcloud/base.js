@@ -21,18 +21,36 @@ function handleSubmit(event) {
                 response.path,
                 "http://" + window.location.host
             );
+
             let permalinkURL = new URL(
                 response.filename,
                 "http://" + window.location.host
             );
+
             document.getElementById("image").src = imgObjectURL;
             document.getElementById("permalink").href = permalinkURL;
+
+            if (imageEl) {
+                imageEl.classList.remove("invisible");
+            }
+
+            if (permalinkEl) {
+                permalinkEl.classList.remove("invisible");
+            }
         });
+
+
+
 }
 
-const form = document.querySelector("#wordcloud");
+const imageEl = document.querySelector("#image");
+if (imageEl)
+    imageEl.classList.add("invisible");
 
+const permalinkEl = document.querySelector("#permalink");
+if (permalinkEl)
+    permalinkEl.classList.add("invisible");
+
+const form = document.querySelector("#wordcloud");
 if (form)
     form.addEventListener("submit", handleSubmit);
-
-
