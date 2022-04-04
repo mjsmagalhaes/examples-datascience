@@ -24,7 +24,7 @@ mixin headerDropbox()
 html
 
 head
-    meta(http-equiv="Content-Security-Policy" content="script-src 'self'")
+    meta(http-equiv="Content-Security-Policy", content="script-src 'self'")
 
     block css
         link(rel="stylesheet" href="/dsapps/_base/base.scss")
@@ -52,7 +52,6 @@ body
                 //- form.d-flex
                 //-     input.form-control.me-2(type="search" placeholder="Search" aria-label="Search")
                 //-     button.btn.btn-outline-success(type="submit") Search
-                    
 
     .m-3
         block body
